@@ -85,6 +85,9 @@ public class CubeController : MonoBehaviour
 	void Start ()
     {
         gameObject.AddComponent<MeshFilter>().mesh = mesh_;
+
+        // ダミーオブジェクトを非表示にする
+        transform.FindChild("Dummy").gameObject.SetActive(false);
     }
 	
     /// <summary>
