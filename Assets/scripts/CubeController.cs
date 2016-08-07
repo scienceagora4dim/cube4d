@@ -32,18 +32,35 @@ public class CubeController : MonoBehaviour
             vec(-0.5f, -0.5f,  0.5f),
         };
 
+        // 4つ目の座標軸の点の設定
+        // UV座標で代用する。ここでのuの値がxyzwのwになる。
+        mesh_.uv = new Vector2[]
+        {
+            // 手前の面
+            vec(0.0f,  0.0f),
+            vec(0.0f,  0.0f),
+            vec(0.0f,  0.0f),
+            vec(0.0f,  0.0f),
+            
+            // 奥の面
+            vec(0.0f,  0.0f),
+            vec(0.0f,  0.0f),
+            vec(0.0f,  0.0f),
+            vec(0.0f,  0.0f),
+        };
+
         // 頂点色の設定
         mesh_.colors = new Color[]
         {
-            rgb(1.0f, 1.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
+            rgb(1.0f, 0.0f, 0.0f),
+            rgb(0.0f, 1.0f, 0.0f),
+            rgb(0.0f, 0.0f, 1.0f),
+            rgb(1.0f, 1.0f, 0.0f),
 
+            rgb(0.0f, 1.0f, 1.0f),
+            rgb(1.0f, 0.0f, 1.0f),
             rgb(1.0f, 1.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
+            rgb(0.0f, 0.0f, 0.0f),
         };
 
         // 面(三角形分割)の設定
@@ -117,7 +134,7 @@ public class CubeController : MonoBehaviour
     /// <returns>Vector2</returns>
     private static Vector2 vec(float x, float y)
     {
-        return new Vector3(x, y);
+        return new Vector2(x, y);
     }
 
     /// <summary>
