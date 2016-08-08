@@ -115,6 +115,19 @@ public class CubeController : MonoBehaviour
     }
 
     /// <summary>
+    /// Vector4を生成する。
+    /// </summary>
+    /// <param name="x">X座標</param>
+    /// <param name="y">Y座標</param>
+    /// <param name="z">Z座標</param>
+    /// <param name="w">W座標</param>
+    /// <returns>Vector4</returns>
+    private static Vector4 vec(float x, float y, float z, float w)
+    {
+        return new Vector4(x, y, z, w);
+    }
+
+    /// <summary>
     /// Vector3を生成する。
     /// </summary>
     /// <param name="x">X座標</param>
