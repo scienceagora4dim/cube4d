@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 /// <summary>
 /// 立方体コントローラークラス
@@ -14,40 +15,29 @@ public class CubeController : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        mesh_ = new Mesh();
-
-        // 頂点の設定
-        mesh_.vertices = new Vector3[]
+        Vector4[] vertices = new Vector4[]
         {
             // 手前の面
-            vec(-0.5f,  0.5f, -0.5f),
-            vec( 0.5f,  0.5f, -0.5f),
-            vec( 0.5f, -0.5f, -0.5f),
-            vec(-0.5f, -0.5f, -0.5f),
+            vec(-0.5f,  0.5f, -0.5f, 0.0f),
+            vec( 0.5f,  0.5f, -0.5f, 0.0f),
+            vec( 0.5f, -0.5f, -0.5f, 0.0f),
+            vec(-0.5f, -0.5f, -0.5f, 0.0f),
 
             // 奥の面
-            vec(-0.5f,  0.5f,  0.5f),
-            vec( 0.5f,  0.5f,  0.5f),
-            vec( 0.5f, -0.5f,  0.5f),
-            vec(-0.5f, -0.5f,  0.5f),
+            vec(-0.5f,  0.5f,  0.5f, 0.0f),
+            vec( 0.5f,  0.5f,  0.5f, 0.0f),
+            vec( 0.5f, -0.5f,  0.5f, 0.0f),
+            vec(-0.5f, -0.5f,  0.5f, 0.0f),
         };
+
+        mesh_ = new Mesh();
+
+        // 頂点の設定(4次元座標の3次元分だけ設定)
+        mesh_.vertices = vertices.Select(v => new Vector3(v.x, v.y, v.z)).ToArray();
 
         // 4つ目の座標軸の点の設定
         // UV座標で代用する。ここでのuの値がxyzwのwになる。
-        mesh_.uv = new Vector2[]
-        {
-            // 手前の面
-            vec(0.0f,  0.0f),
-            vec(0.0f,  0.0f),
-            vec(0.0f,  0.0f),
-            vec(0.0f,  0.0f),
-            
-            // 奥の面
-            vec(0.0f,  0.0f),
-            vec(0.0f,  0.0f),
-            vec(0.0f,  0.0f),
-            vec(0.0f,  0.0f),
-        };
+        mesh_.uv = vertices.Select(v => new Vector2(v.w, 0.0f)).ToArray();
 
         // 頂点色の設定
         mesh_.colors = new Color[]
