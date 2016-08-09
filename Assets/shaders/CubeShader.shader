@@ -1,19 +1,42 @@
 ﻿Shader "Unlit/CubeShader"
 {
+	Properties
+	{
+		_CameraPosition ("Camera position", Vector) = (0, 0, 0, 0)
+		_CameraDirection ("Camera direction", Vector) = (0, 0, 1, 1)
+		_CubePosition ("Cube position", Vector) = (0, 0, 4, 0)
+		_ProjectionDistance ("Projection distance", Float) = 16.0
+	}
+
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" }
+		Tags { "RenderType" = "Opaque" }
 		LOD 100
 
 		Pass
 		{
+			Cull Off // ポリゴンを両面レンダリングする。
+			Blend SrcAlpha OneMinusSrcAlpha // 一般的なアルファブレンドを行う。
+
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
 			// make fog work
 			#pragma multi_compile_fog
-			
+
 			#include "UnityCG.cginc"
+
+			/// カメラの位置
+			float4 _CameraPosition;
+
+			/// カメラの向き
+			float4 _CameraDirection;
+
+			/// 立方体の位置
+			float4 _CubePosition;
+
+			/// 投影時の係数
+			float _ProjectionDistance;
 
 			/**
 			 *	頂点データ構造体
@@ -50,14 +73,29 @@
 			{
 				v2f o;
 
-				// TODO: ここで4次元座標を3次元に投影する。
-				o.uv = v.uv;
+				// 4次元座標を3次元に投影する。
+				
+				// 立方体の頂点の座標
+				float4 position = float4(v.vertex.xyz, v.uv.x) + _CubePosition;
 
-				// 通常の3次元MVP変換
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				// カメラから頂点への方向
+				float4 r = position;
+
+				// カメラから3次元空間への方向
+				float4 n = _CameraDirection;
+
+				// カメラから3次元空間に投影した頂点へのベクトルの係数を求める
+				float l = _ProjectionDistance * dot(n, n) / dot(r, n);
+
+				// 3次元空間に投影した頂点座標を求める
+				float4 vertex = float4((l * r).xyz, 1);
+
+				// 3次元VP変換
+				o.vertex = mul(UNITY_MATRIX_VP, vertex);
 
 				// 頂点色の引継ぎ
 				o.color = v.color;
+				o.uv = v.uv;
 				return o;
 			}
 			

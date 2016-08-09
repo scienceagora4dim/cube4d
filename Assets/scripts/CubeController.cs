@@ -7,6 +7,12 @@ using System.Linq;
 /// </summary>
 public class CubeController : MonoBehaviour
 {
+
+    /// <summary>
+    /// 面のアルファ値
+    /// </summary>
+    private const float ALPHA = 0.5f;
+
     // 生成されたメッシュオブジェクト
     private Mesh mesh_;
 
@@ -54,25 +60,25 @@ public class CubeController : MonoBehaviour
         // 頂点色の設定
         mesh_.colors = new Color[]
         {
-            rgb(1.0f, 0.0f, 0.0f),
-            rgb(0.0f, 1.0f, 0.0f),
-            rgb(0.0f, 0.0f, 1.0f),
-            rgb(1.0f, 1.0f, 0.0f),
+            rgba(1.0f, 0.0f, 0.0f, ALPHA),
+            rgba(0.0f, 1.0f, 0.0f, ALPHA),
+            rgba(0.0f, 0.0f, 1.0f, ALPHA),
+            rgba(1.0f, 1.0f, 0.0f, ALPHA),
 
-            rgb(0.0f, 1.0f, 1.0f),
-            rgb(1.0f, 0.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
-            rgb(0.0f, 0.0f, 0.0f),
+            rgba(0.0f, 1.0f, 1.0f, ALPHA),
+            rgba(1.0f, 0.0f, 1.0f, ALPHA),
+            rgba(1.0f, 1.0f, 1.0f, ALPHA),
+            rgba(0.0f, 0.0f, 0.0f, ALPHA),
 
-            rgb(0.0f, 1.0f, 1.0f),
-            rgb(1.0f, 0.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
-            rgb(0.0f, 0.0f, 0.0f),
+            rgba(0.0f, 1.0f, 1.0f, ALPHA),
+            rgba(1.0f, 0.0f, 1.0f, ALPHA),
+            rgba(1.0f, 1.0f, 1.0f, ALPHA),
+            rgba(0.0f, 0.0f, 0.0f, ALPHA),
 
-            rgb(1.0f, 0.0f, 0.0f),
-            rgb(0.0f, 1.0f, 0.0f),
-            rgb(0.0f, 0.0f, 1.0f),
-            rgb(1.0f, 1.0f, 0.0f),
+            rgba(1.0f, 0.0f, 0.0f, ALPHA),
+            rgba(0.0f, 1.0f, 0.0f, ALPHA),
+            rgba(0.0f, 0.0f, 1.0f, ALPHA),
+            rgba(1.0f, 1.0f, 0.0f, ALPHA),
         };
 
         // 面(三角形分割)の設定
@@ -253,6 +259,19 @@ public class CubeController : MonoBehaviour
     /// <returns></returns>
     private static Color rgb(float r, float g, float b)
     {
-        return new Color(r, g, b, 1.0f);
+        return rgba(r, g, b, 1.0f);
+    }
+
+    /// <summary>
+    /// Colorを生成する。各成分の値は[0.0f, 1.0f]
+    /// </summary>
+    /// <param name="r">赤成分</param>
+    /// <param name="g">緑成分</param>
+    /// <param name="b">青成分</param>
+    /// <param name="a">アルファ成分</param>
+    /// <returns></returns>
+    private static Color rgba(float r, float g, float b, float a)
+    {
+        return new Color(r, g, b, a);
     }
 }
