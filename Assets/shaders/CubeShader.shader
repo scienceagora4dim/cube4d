@@ -38,6 +38,15 @@
 			/// 投影時の係数
 			float _ProjectionDistance;
 
+			/// 投影用の行列
+			const float4x4 projectionTo3d =
+			{
+				1.0f, 0.0f, 0.0f, 1.0f,
+				0.0f, 1.0f, 0.0f, 1.0f,
+				0.0f, 0.0f, 1.0f, 1.0f,
+				0.0f, 0.0f, 0.0f, 0.0f,
+			};
+
 			/**
 			 *	頂点データ構造体
 			 *
@@ -59,7 +68,6 @@
 			{
 				float4 vertex : SV_POSITION;
 				float4 color : COLOR0;
-				float2 uv : TEXCOORD0;
 			};
 
 			/**
@@ -69,33 +77,25 @@
 			 *	頂点毎に呼び出される。
 			 *	頂点を座標変換し、フラグメントシェーダーに渡す。
 			 */
-			v2f vert (appdata v)
+			v2f vert(appdata v)
 			{
 				v2f o;
 
 				// 4次元座標を3次元に投影する。
 				
 				// 立方体の頂点の座標
-				float4 position = float4(v.vertex.xyz, v.uv.x) + _CubePosition;
-
-				// カメラから頂点への方向
-				float4 r = position;
-
-				// カメラから3次元空間への方向
-				float4 n = _CameraDirection;
-
-				// カメラから3次元空間に投影した頂点へのベクトルの係数を求める
-				float l = _ProjectionDistance * dot(n, n) / dot(r, n);
-
-				// 3次元空間に投影した頂点座標を求める
-				float4 vertex = float4((l * r).xyz, 1);
-
-				// 3次元VP変換
-				o.vertex = mul(UNITY_MATRIX_VP, vertex);
+				float4 position = float4(v.vertex.xyz, 1);
+				if (v.uv.x > 0)
+				{
+					position.xyz += 0.5f;
+				}
+				float4 vertex = position;
+				
+				// 3次元MVP変換
+				o.vertex = mul(UNITY_MATRIX_MVP, vertex);
 
 				// 頂点色の引継ぎ
 				o.color = v.color;
-				o.uv = v.uv;
 				return o;
 			}
 			
@@ -105,7 +105,7 @@
 			 *	頂点シェーダーの出力結果をもとに、画素毎の色の計算を行う。
 			 *	頂点シェーダーの出力結果を画素毎に線型補完した値が渡される。
 			 */
-			float4 frag (v2f i) : SV_Target
+			float4 frag(v2f i) : SV_Target
 			{
 				// 頂点色をそのまま返す。
 				return i.color;

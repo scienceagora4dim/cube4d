@@ -11,7 +11,13 @@ public class CubeController : MonoBehaviour
     /// <summary>
     /// 面のアルファ値
     /// </summary>
-    private const float ALPHA = 0.5f;
+    private const float ALPHA = 0.3f;
+
+    /// <summary>
+    /// 線のみ描画するかどうかのフラグ
+    /// </summary>
+    [SerializeField, Tooltip("線のみ描画するかどうか")]
+    private bool lines;
 
     // 生成されたメッシュオブジェクト
     private Mesh mesh_;
@@ -24,28 +30,28 @@ public class CubeController : MonoBehaviour
         Vector4[] vertices = new Vector4[]
         {
             // 手前の面-w
-            vec(-0.5f,  0.5f, -0.5f, -0.5f),
-            vec( 0.5f,  0.5f, -0.5f, -0.5f),
-            vec( 0.5f, -0.5f, -0.5f, -0.5f),
-            vec(-0.5f, -0.5f, -0.5f, -0.5f),
+            vec(-0.5f,  0.5f, -0.5f, 0.0f),
+            vec( 0.5f,  0.5f, -0.5f, 0.0f),
+            vec( 0.5f, -0.5f, -0.5f, 0.0f),
+            vec(-0.5f, -0.5f, -0.5f, 0.0f),
 
             // 奥の面-w
-            vec(-0.5f,  0.5f,  0.5f, -0.5f),
-            vec( 0.5f,  0.5f,  0.5f, -0.5f),
-            vec( 0.5f, -0.5f,  0.5f, -0.5f),
-            vec(-0.5f, -0.5f,  0.5f, -0.5f),
+            vec(-0.5f,  0.5f,  0.5f, 0.0f),
+            vec( 0.5f,  0.5f,  0.5f, 0.0f),
+            vec( 0.5f, -0.5f,  0.5f, 0.0f),
+            vec(-0.5f, -0.5f,  0.5f, 0.0f),
 
             // 手前の面+w
-            vec(-0.5f,  0.5f, -0.5f,  0.5f),
-            vec( 0.5f,  0.5f, -0.5f,  0.5f),
-            vec( 0.5f, -0.5f, -0.5f,  0.5f),
-            vec(-0.5f, -0.5f, -0.5f,  0.5f),
+            vec(-0.5f,  0.5f, -0.5f, 1.0f),
+            vec( 0.5f,  0.5f, -0.5f, 1.0f),
+            vec( 0.5f, -0.5f, -0.5f, 1.0f),
+            vec(-0.5f, -0.5f, -0.5f, 1.0f),
 
             // 奥の面+w
-            vec(-0.5f,  0.5f,  0.5f,  0.5f),
-            vec( 0.5f,  0.5f,  0.5f,  0.5f),
-            vec( 0.5f, -0.5f,  0.5f,  0.5f),
-            vec(-0.5f, -0.5f,  0.5f,  0.5f),
+            vec(-0.5f,  0.5f,  0.5f, 1.0f),
+            vec( 0.5f,  0.5f,  0.5f, 1.0f),
+            vec( 0.5f, -0.5f,  0.5f, 1.0f),
+            vec(-0.5f, -0.5f,  0.5f, 1.0f),
         };
 
         mesh_ = new Mesh();
@@ -80,11 +86,58 @@ public class CubeController : MonoBehaviour
             rgba(0.0f, 0.0f, 1.0f, ALPHA),
             rgba(1.0f, 1.0f, 0.0f, ALPHA),
         };
-
-        // 面(三角形分割)の設定
-        // 時計回り方向が法線方向
-        mesh_.triangles = new int[]
+        
+        if(lines)
         {
+            // 輪郭線の定義
+            mesh_.SetIndices(new int[] {
+                0, 1,
+                1, 2,
+                2, 3,
+                3, 0,
+
+                4, 5,
+                5, 6,
+                6, 7,
+                7, 4,
+
+                0, 4,
+                1, 5,
+                2, 6,
+                3, 7,
+
+                8, 9,
+                9, 10,
+                10, 11,
+                11, 8,
+
+                12, 13,
+                13, 14,
+                14, 15,
+                15, 12,
+
+                8, 12,
+                9, 13,
+                10, 14,
+                11, 15,
+
+                0, 8,
+                1, 9,
+                2, 10,
+                3, 11,
+
+                4, 12,
+                5, 13,
+                6, 14,
+                7, 15,
+            }, MeshTopology.Lines, 0);
+        }
+        else
+        {
+            // 面(三角形分割)の設定
+            // 時計回り方向が法線方向
+            mesh_.triangles = new int[]
+            {
             // -wの立方体
 
             // 手前の面
@@ -190,9 +243,10 @@ public class CubeController : MonoBehaviour
             // 右後の面
             5, 13, 14,
             5, 14, 6,
-        };
+            };
 
-        mesh_.RecalculateNormals();
+            mesh_.RecalculateNormals();
+        }
         mesh_.RecalculateBounds();
     }
 
