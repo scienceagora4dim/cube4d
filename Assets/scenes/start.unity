@@ -161,7 +161,7 @@ Prefab:
     - target: {fileID: 224000012407591332, guid: b64822420b5a0844caa67c955aa3362a,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 790
+      value: 790.00006
       objectReference: {fileID: 0}
     - target: {fileID: 224000012407591332, guid: b64822420b5a0844caa67c955aa3362a,
         type: 2}
@@ -426,6 +426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a308039048e8a46b55f45c4db64e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lines: 1
 --- !u!4 &460082018
 Transform:
   m_ObjectHideFlags: 0
@@ -843,7 +844,7 @@ Prefab:
     - target: {fileID: 224000012407591332, guid: b64822420b5a0844caa67c955aa3362a,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 790
+      value: 790.00006
       objectReference: {fileID: 0}
     - target: {fileID: 224000012407591332, guid: b64822420b5a0844caa67c955aa3362a,
         type: 2}
@@ -1094,7 +1095,7 @@ Prefab:
     - target: {fileID: 224000012407591332, guid: b64822420b5a0844caa67c955aa3362a,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 790
+      value: 790.00006
       objectReference: {fileID: 0}
     - target: {fileID: 224000012407591332, guid: b64822420b5a0844caa67c955aa3362a,
         type: 2}

@@ -135,5 +135,8 @@ Material:
         name: _CubePosition
       second: {r: 0, g: 0, b: 4, a: 0}
     - first:
+        name: _CubeRotation
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}

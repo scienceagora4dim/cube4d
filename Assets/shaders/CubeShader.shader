@@ -5,6 +5,7 @@
 		_CameraPosition ("Camera position", Vector) = (0, 0, 0, 0)
 		_CameraDirection ("Camera direction", Vector) = (0, 0, 1, 1)
 		_CubePosition ("Cube position", Vector) = (0, 0, 4, 0)
+		_CubeRotation ("Cube rotation", Vector) = (0, 0, 0, 0)
 		_ProjectionDistance ("Projection distance", Float) = 16.0
 	}
 
@@ -35,6 +36,9 @@
 			/// 立方体の位置
 			float4 _CubePosition;
 
+			/// 立方体のW軸が関わる回転
+			float4 _CubeRotation;
+
 			/// 投影時の係数
 			float _ProjectionDistance;
 
@@ -46,6 +50,51 @@
 				0.0f, 0.0f, 1.0f, 1.0f,
 				0.0f, 0.0f, 0.0f, 0.0f,
 			};
+
+			/// WX平面回転行列を生成する
+			float4x4 makeRotateWX(float theta)
+			{
+				float c = cos(theta);
+				float s = sin(theta);
+				const float4x4 result =
+				{
+					   c, 0.0f, 0.0f,    s,
+					0.0f, 1.0f, 0.0f, 0.0f,
+					0.0f, 0.0f, 1.0f, 0.0f,
+					  -s, 0.0f, 0.0f,    c,
+				};
+				return result;
+			}
+
+			/// WY平面回転行列を生成する
+			float4x4 makeRotateWY(float theta)
+			{
+				float c = cos(theta);
+				float s = sin(theta);
+				const float4x4 result =
+				{
+					1.0f, 0.0f, 0.0f, 0.0f,
+					0.0f,    c, 0.0f,   -s,
+					0.0f, 0.0f, 1.0f, 0.0f,
+					0.0f,    s, 0.0f,    c,
+				};
+				return result;
+			}
+
+			/// WZ平面回転行列を生成する
+			float4x4 makeRotateWZ(float theta)
+			{
+				float c = cos(theta);
+				float s = sin(theta);
+				const float4x4 result =
+				{
+					1.0f, 0.0f, 0.0f, 0.0f,
+					0.0f, 1.0f, 0.0f, 0.0f,
+					0.0f, 0.0f, c,    -s,
+					0.0f, 0.0f, s,    c,
+				};
+				return result;
+			}
 
 			/**
 			 *	頂点データ構造体
@@ -81,17 +130,21 @@
 			{
 				v2f o;
 
-				// 4次元座標を3次元に投影する。
-				
-				// 立方体の頂点の座標
-				float4 position = float4(v.vertex.xyz, 1);
-				if (v.uv.x > 0)
-				{
-					position.xyz += 0.5f;
-				}
-				float4 vertex = position;
-				
-				// 3次元MVP変換
+				// 4次元回転行列
+				float4x4 wx = makeRotateWX(radians(_CubeRotation.x));
+				float4x4 wy = makeRotateWY(radians(_CubeRotation.y));
+				float4x4 wz = makeRotateWZ(radians(_CubeRotation.z));
+
+				// 立方体の頂点の座標を回転する(W軸が関わるものだけ)
+				float4 vertex = float4(v.vertex.xyz, v.uv.x);
+				vertex = mul(wz, mul(wy, mul(wx, vertex)));
+
+				// W軸の値をxyzに加算して、W軸はつぶすことで投影を行う。
+				// TODO: もっと別の方法を考える
+				vertex.xyz += vertex.w;
+				vertex.w = 1;
+
+				// 3次元MVP変換(通常の3次元回転はこちらで行う)
 				o.vertex = mul(UNITY_MATRIX_MVP, vertex);
 
 				// 頂点色の引継ぎ
