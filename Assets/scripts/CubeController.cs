@@ -5,41 +5,69 @@ using System.Linq;
 /// <summary>
 /// 立方体コントローラークラス
 /// </summary>
+[RequireComponent(typeof(MeshRenderer))]
 public class CubeController : MonoBehaviour
 {
+
+    /// <summary>
+    /// 面のアルファ値
+    /// </summary>
+    private const float ALPHA = 0.3f;
+
+    /// <summary>
+    /// 線のみ描画するかどうかのフラグ
+    /// </summary>
+    [SerializeField, Tooltip("線のみ描画するかどうか")]
+    private bool lines;
+
+    /// <summary>
+    /// W軸関連の回転角度
+    /// </summary>
+    [SerializeField, Tooltip("W軸関連の回転角度")]
+    public Vector3 wAngles;
+
     // 生成されたメッシュオブジェクト
     private Mesh mesh_;
+
+    // メッシュ描画設定
+    private MeshRenderer meshRenderer_;
+
+    // 回転角度プロパティID
+    private int cubeRotationId_;
 
     /// <summary>
     /// ゲーム開始時の処理
     /// </summary>
     void Awake()
     {
+        meshRenderer_ = GetComponent<MeshRenderer>();
+        cubeRotationId_ = Shader.PropertyToID("_CubeRotation");
+
         Vector4[] vertices = new Vector4[]
         {
             // 手前の面-w
-            vec(-0.5f,  0.5f, -0.5f, -0.5f),
-            vec( 0.5f,  0.5f, -0.5f, -0.5f),
-            vec( 0.5f, -0.5f, -0.5f, -0.5f),
-            vec(-0.5f, -0.5f, -0.5f, -0.5f),
+            vec(-0.5f,  0.5f, -0.5f, 0.0f),
+            vec( 0.5f,  0.5f, -0.5f, 0.0f),
+            vec( 0.5f, -0.5f, -0.5f, 0.0f),
+            vec(-0.5f, -0.5f, -0.5f, 0.0f),
 
             // 奥の面-w
-            vec(-0.5f,  0.5f,  0.5f, -0.5f),
-            vec( 0.5f,  0.5f,  0.5f, -0.5f),
-            vec( 0.5f, -0.5f,  0.5f, -0.5f),
-            vec(-0.5f, -0.5f,  0.5f, -0.5f),
+            vec(-0.5f,  0.5f,  0.5f, 0.0f),
+            vec( 0.5f,  0.5f,  0.5f, 0.0f),
+            vec( 0.5f, -0.5f,  0.5f, 0.0f),
+            vec(-0.5f, -0.5f,  0.5f, 0.0f),
 
             // 手前の面+w
-            vec(-0.5f,  0.5f, -0.5f,  0.5f),
-            vec( 0.5f,  0.5f, -0.5f,  0.5f),
-            vec( 0.5f, -0.5f, -0.5f,  0.5f),
-            vec(-0.5f, -0.5f, -0.5f,  0.5f),
+            vec(-0.5f,  0.5f, -0.5f, 1.0f),
+            vec( 0.5f,  0.5f, -0.5f, 1.0f),
+            vec( 0.5f, -0.5f, -0.5f, 1.0f),
+            vec(-0.5f, -0.5f, -0.5f, 1.0f),
 
             // 奥の面+w
-            vec(-0.5f,  0.5f,  0.5f,  0.5f),
-            vec( 0.5f,  0.5f,  0.5f,  0.5f),
-            vec( 0.5f, -0.5f,  0.5f,  0.5f),
-            vec(-0.5f, -0.5f,  0.5f,  0.5f),
+            vec(-0.5f,  0.5f,  0.5f, 1.0f),
+            vec( 0.5f,  0.5f,  0.5f, 1.0f),
+            vec( 0.5f, -0.5f,  0.5f, 1.0f),
+            vec(-0.5f, -0.5f,  0.5f, 1.0f),
         };
 
         mesh_ = new Mesh();
@@ -54,31 +82,78 @@ public class CubeController : MonoBehaviour
         // 頂点色の設定
         mesh_.colors = new Color[]
         {
-            rgb(1.0f, 0.0f, 0.0f),
-            rgb(0.0f, 1.0f, 0.0f),
-            rgb(0.0f, 0.0f, 1.0f),
-            rgb(1.0f, 1.0f, 0.0f),
+            rgba(1.0f, 0.0f, 0.0f, ALPHA),
+            rgba(0.0f, 1.0f, 0.0f, ALPHA),
+            rgba(0.0f, 0.0f, 1.0f, ALPHA),
+            rgba(1.0f, 1.0f, 0.0f, ALPHA),
 
-            rgb(0.0f, 1.0f, 1.0f),
-            rgb(1.0f, 0.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
-            rgb(0.0f, 0.0f, 0.0f),
+            rgba(0.0f, 1.0f, 1.0f, ALPHA),
+            rgba(1.0f, 0.0f, 1.0f, ALPHA),
+            rgba(1.0f, 1.0f, 1.0f, ALPHA),
+            rgba(0.0f, 0.0f, 0.0f, ALPHA),
 
-            rgb(0.0f, 1.0f, 1.0f),
-            rgb(1.0f, 0.0f, 1.0f),
-            rgb(1.0f, 1.0f, 1.0f),
-            rgb(0.0f, 0.0f, 0.0f),
+            rgba(0.0f, 1.0f, 1.0f, ALPHA),
+            rgba(1.0f, 0.0f, 1.0f, ALPHA),
+            rgba(1.0f, 1.0f, 1.0f, ALPHA),
+            rgba(0.0f, 0.0f, 0.0f, ALPHA),
 
-            rgb(1.0f, 0.0f, 0.0f),
-            rgb(0.0f, 1.0f, 0.0f),
-            rgb(0.0f, 0.0f, 1.0f),
-            rgb(1.0f, 1.0f, 0.0f),
+            rgba(1.0f, 0.0f, 0.0f, ALPHA),
+            rgba(0.0f, 1.0f, 0.0f, ALPHA),
+            rgba(0.0f, 0.0f, 1.0f, ALPHA),
+            rgba(1.0f, 1.0f, 0.0f, ALPHA),
         };
-
-        // 面(三角形分割)の設定
-        // 時計回り方向が法線方向
-        mesh_.triangles = new int[]
+        
+        if(lines)
         {
+            // 輪郭線の定義
+            mesh_.SetIndices(new int[] {
+                0, 1,
+                1, 2,
+                2, 3,
+                3, 0,
+
+                4, 5,
+                5, 6,
+                6, 7,
+                7, 4,
+
+                0, 4,
+                1, 5,
+                2, 6,
+                3, 7,
+
+                8, 9,
+                9, 10,
+                10, 11,
+                11, 8,
+
+                12, 13,
+                13, 14,
+                14, 15,
+                15, 12,
+
+                8, 12,
+                9, 13,
+                10, 14,
+                11, 15,
+
+                0, 8,
+                1, 9,
+                2, 10,
+                3, 11,
+
+                4, 12,
+                5, 13,
+                6, 14,
+                7, 15,
+            }, MeshTopology.Lines, 0);
+        }
+        else
+        {
+            // 面(三角形分割)の設定
+            // 時計回り方向が法線方向
+            mesh_.triangles = new int[]
+            {
             // -wの立方体
 
             // 手前の面
@@ -184,9 +259,10 @@ public class CubeController : MonoBehaviour
             // 右後の面
             5, 13, 14,
             5, 14, 6,
-        };
+            };
 
-        mesh_.RecalculateNormals();
+            mesh_.RecalculateNormals();
+        }
         mesh_.RecalculateBounds();
     }
 
@@ -206,6 +282,7 @@ public class CubeController : MonoBehaviour
     /// </summary>
 	void Update ()
     {
+        meshRenderer_.material.SetVector(cubeRotationId_, wAngles);
     }
 
     /// <summary>
@@ -253,6 +330,19 @@ public class CubeController : MonoBehaviour
     /// <returns></returns>
     private static Color rgb(float r, float g, float b)
     {
-        return new Color(r, g, b, 1.0f);
+        return rgba(r, g, b, 1.0f);
+    }
+
+    /// <summary>
+    /// Colorを生成する。各成分の値は[0.0f, 1.0f]
+    /// </summary>
+    /// <param name="r">赤成分</param>
+    /// <param name="g">緑成分</param>
+    /// <param name="b">青成分</param>
+    /// <param name="a">アルファ成分</param>
+    /// <returns></returns>
+    private static Color rgba(float r, float g, float b, float a)
+    {
+        return new Color(r, g, b, a);
     }
 }
