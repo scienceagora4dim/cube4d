@@ -25,6 +25,24 @@ public class StartSceneController : MonoBehaviour
     private LabeledSliderController rotateZSlider;
 
     /// <summary>
+    /// WX平面回転用スライダー
+    /// </summary>
+    [SerializeField, Tooltip("WX平面回転用スライダー")]
+    private LabeledSliderController rotateWXSlider;
+
+    /// <summary>
+    /// WY平面回転用スライダー
+    /// </summary>
+    [SerializeField, Tooltip("WY平面回転用スライダー")]
+    private LabeledSliderController rotateWYSlider;
+
+    /// <summary>
+    /// WZ平面回転用スライダー
+    /// </summary>
+    [SerializeField, Tooltip("WZ平面回転用スライダー")]
+    private LabeledSliderController rotateWZSlider;
+
+    /// <summary>
     /// 超立方体オブジェクト
     /// </summary>
     [SerializeField, Tooltip("超立方体")]
@@ -44,5 +62,6 @@ public class StartSceneController : MonoBehaviour
 	void Update ()
     {
         cube.gameObject.transform.eulerAngles = new Vector3(rotateXSlider.value, rotateYSlider.value, rotateZSlider.value) * 360.0f;
+        cube.wAngles = new Vector3(rotateWXSlider.value, rotateWYSlider.value, rotateWZSlider.value) * 360.0f;
 	}
 }

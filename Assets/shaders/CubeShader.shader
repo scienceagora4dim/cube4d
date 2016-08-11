@@ -2,11 +2,7 @@
 {
 	Properties
 	{
-		_CameraPosition ("Camera position", Vector) = (0, 0, 0, 0)
-		_CameraDirection ("Camera direction", Vector) = (0, 0, 1, 1)
-		_CubePosition ("Cube position", Vector) = (0, 0, 4, 0)
 		_CubeRotation ("Cube rotation", Vector) = (0, 0, 0, 0)
-		_ProjectionDistance ("Projection distance", Float) = 16.0
 	}
 
 	SubShader
@@ -27,20 +23,8 @@
 
 			#include "UnityCG.cginc"
 
-			/// カメラの位置
-			float4 _CameraPosition;
-
-			/// カメラの向き
-			float4 _CameraDirection;
-
-			/// 立方体の位置
-			float4 _CubePosition;
-
 			/// 立方体のW軸が関わる回転
 			float4 _CubeRotation;
-
-			/// 投影時の係数
-			float _ProjectionDistance;
 
 			/// 投影用の行列
 			const float4x4 projectionTo3d =

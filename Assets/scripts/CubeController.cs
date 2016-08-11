@@ -5,6 +5,7 @@ using System.Linq;
 /// <summary>
 /// 立方体コントローラークラス
 /// </summary>
+[RequireComponent(typeof(MeshRenderer))]
 public class CubeController : MonoBehaviour
 {
 
@@ -19,14 +20,29 @@ public class CubeController : MonoBehaviour
     [SerializeField, Tooltip("線のみ描画するかどうか")]
     private bool lines;
 
+    /// <summary>
+    /// W軸関連の回転角度
+    /// </summary>
+    [SerializeField, Tooltip("W軸関連の回転角度")]
+    public Vector3 wAngles;
+
     // 生成されたメッシュオブジェクト
     private Mesh mesh_;
+
+    // メッシュ描画設定
+    private MeshRenderer meshRenderer_;
+
+    // 回転角度プロパティID
+    private int cubeRotationId_;
 
     /// <summary>
     /// ゲーム開始時の処理
     /// </summary>
     void Awake()
     {
+        meshRenderer_ = GetComponent<MeshRenderer>();
+        cubeRotationId_ = Shader.PropertyToID("_CubeRotation");
+
         Vector4[] vertices = new Vector4[]
         {
             // 手前の面-w
@@ -266,6 +282,7 @@ public class CubeController : MonoBehaviour
     /// </summary>
 	void Update ()
     {
+        meshRenderer_.material.SetVector(cubeRotationId_, wAngles);
     }
 
     /// <summary>
