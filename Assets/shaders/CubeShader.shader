@@ -27,13 +27,19 @@
 			float4 _CubeRotation;
 
 			/// 投影用の行列
-			const float4x4 projectionTo3d =
+			float4x4 makeProjection()
 			{
-				1.0f, 0.0f, 0.0f, 1.0f,
-				0.0f, 1.0f, 0.0f, 1.0f,
-				0.0f, 0.0f, 1.0f, 1.0f,
-				0.0f, 0.0f, 0.0f, 0.0f,
-			};
+				// XYZ各座標にWの値を加算する。
+				// Wは0にする。
+				const float4x4 result =
+				{
+					1.0f, 0.0f, 0.0f, 1.0f,
+					0.0f, 1.0f, 0.0f, 1.0f,
+					0.0f, 0.0f, 1.0f, 1.0f,
+					0.0f, 0.0f, 0.0f, 0.0f,
+				};
+				return result;
+			}
 
 			/// WX平面回転行列を生成する
 			float4x4 makeRotateWX(float theta)
@@ -125,7 +131,8 @@
 
 				// W軸の値をxyzに加算して、W軸はつぶすことで投影を行う。
 				// TODO: もっと別の方法を考える
-				vertex.xyz += vertex.w;
+				float4x4 p = makeProjection();
+				vertex = mul(p, vertex);
 				vertex.w = 1;
 
 				// 3次元MVP変換(通常の3次元回転はこちらで行う)
