@@ -45,29 +45,29 @@ public class CubeController : MonoBehaviour
 
         Vector4[] vertices = new Vector4[]
         {
-            // 手前の面-w
-            vec(-0.5f,  0.5f, -0.5f, 0.0f),
-            vec( 0.5f,  0.5f, -0.5f, 0.0f),
-            vec( 0.5f, -0.5f, -0.5f, 0.0f),
-            vec(-0.5f, -0.5f, -0.5f, 0.0f),
+            // 手前の面
+            vec(-0.5f,  0.5f, -0.5f, -0.5f), //0
+            vec( 0.5f,  0.5f, -0.5f, -0.5f), //1
+            vec( 0.5f, -0.5f, -0.5f, -0.5f), //2
+            vec(-0.5f, -0.5f, -0.5f, -0.5f), //3
 
-            // 奥の面-w
-            vec(-0.5f,  0.5f,  0.5f, 0.0f),
-            vec( 0.5f,  0.5f,  0.5f, 0.0f),
-            vec( 0.5f, -0.5f,  0.5f, 0.0f),
-            vec(-0.5f, -0.5f,  0.5f, 0.0f),
+            // 奥の面
+            vec(-0.5f,  0.5f,  0.5f, -0.5f), //4
+            vec( 0.5f,  0.5f,  0.5f, -0.5f), //5
+            vec( 0.5f, -0.5f,  0.5f, -0.5f), //6
+            vec(-0.5f, -0.5f,  0.5f, -0.5f), //7
 
-            // 手前の面+w
-            vec(-0.5f,  0.5f, -0.5f, 1.0f),
-            vec( 0.5f,  0.5f, -0.5f, 1.0f),
-            vec( 0.5f, -0.5f, -0.5f, 1.0f),
-            vec(-0.5f, -0.5f, -0.5f, 1.0f),
+            // 手前の面
+            vec(-0.5f,  0.5f, -0.5f, 0.5f), //8
+            vec( 0.5f,  0.5f, -0.5f, 0.5f), //9
+            vec( 0.5f, -0.5f, -0.5f, 0.5f), //10
+            vec(-0.5f, -0.5f, -0.5f, 0.5f), //11
 
-            // 奥の面+w
-            vec(-0.5f,  0.5f,  0.5f, 1.0f),
-            vec( 0.5f,  0.5f,  0.5f, 1.0f),
-            vec( 0.5f, -0.5f,  0.5f, 1.0f),
-            vec(-0.5f, -0.5f,  0.5f, 1.0f),
+            // 奥の面
+            vec(-0.5f,  0.5f,  0.5f, 0.5f), //12
+            vec( 0.5f,  0.5f,  0.5f, 0.5f), //13
+            vec( 0.5f, -0.5f,  0.5f, 0.5f), //14
+            vec(-0.5f, -0.5f,  0.5f, 0.5f), //15
         };
 
         mesh_ = new Mesh();
@@ -82,25 +82,25 @@ public class CubeController : MonoBehaviour
         // 頂点色の設定
         mesh_.colors = new Color[]
         {
-            rgba(1.0f, 0.0f, 0.0f, ALPHA),
-            rgba(0.0f, 1.0f, 0.0f, ALPHA),
-            rgba(0.0f, 0.0f, 1.0f, ALPHA),
-            rgba(1.0f, 1.0f, 0.0f, ALPHA),
+            rgba(1.0f, 0.0f, 0.0f, ALPHA), //red
+            rgba(0.0f, 1.0f, 0.0f, ALPHA), //green
+            rgba(0.0f, 0.0f, 1.0f, ALPHA), //blue
+            rgba(1.0f, 1.0f, 0.0f, ALPHA), //yellow
 
-            rgba(0.0f, 1.0f, 1.0f, ALPHA),
-            rgba(1.0f, 0.0f, 1.0f, ALPHA),
-            rgba(1.0f, 1.0f, 1.0f, ALPHA),
-            rgba(0.0f, 0.0f, 0.0f, ALPHA),
+            rgba(0.0f, 1.0f, 1.0f, ALPHA), //skyblue
+            rgba(1.0f, 0.0f, 1.0f, ALPHA), //magenta
+            rgba(1.0f, 1.0f, 1.0f, ALPHA), //white
+            rgba(0.0f, 0.0f, 0.0f, ALPHA), //black
 
-            rgba(0.0f, 1.0f, 1.0f, ALPHA),
-            rgba(1.0f, 0.0f, 1.0f, ALPHA),
-            rgba(1.0f, 1.0f, 1.0f, ALPHA),
-            rgba(0.0f, 0.0f, 0.0f, ALPHA),
+            rgba(0.0f, 1.0f, 1.0f, ALPHA), //skyblue
+            rgba(1.0f, 0.0f, 1.0f, ALPHA), //magenta
+            rgba(1.0f, 1.0f, 1.0f, ALPHA), //white
+            rgba(0.0f, 0.0f, 0.0f, ALPHA), //black
 
-            rgba(1.0f, 0.0f, 0.0f, ALPHA),
-            rgba(0.0f, 1.0f, 0.0f, ALPHA),
-            rgba(0.0f, 0.0f, 1.0f, ALPHA),
-            rgba(1.0f, 1.0f, 0.0f, ALPHA),
+            rgba(1.0f, 0.0f, 0.0f, ALPHA), //red
+            rgba(0.0f, 1.0f, 0.0f, ALPHA), //green
+            rgba(0.0f, 0.0f, 1.0f, ALPHA), //blue
+            rgba(1.0f, 1.0f, 0.0f, ALPHA), //yellow
         };
         
         if(lines)
@@ -227,7 +227,7 @@ public class CubeController : MonoBehaviour
             // 2つの立方体をつなぐ+y側の面
 
             // 手前の面
-            0, 1, 9,
+            0, 8, 1,
             1, 9, 8,
 
             // 右の面
@@ -275,6 +275,7 @@ public class CubeController : MonoBehaviour
 
         // ダミーオブジェクトを非表示にする
         transform.FindChild("Dummy").gameObject.SetActive(false);
+        //transform.FindChild("Dummy-Left").gameObject.SetActive(false);
     }
 	
     /// <summary>

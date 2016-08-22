@@ -14,7 +14,7 @@ InputManager:
     altNegativeButton: a
     altPositiveButton: d
     gravity: 10
-    dead: 0
+    dead: 0.5
     sensitivity: 1
     snap: 1
     invert: 0
@@ -30,7 +30,7 @@ InputManager:
     altNegativeButton: s
     altPositiveButton: w
     gravity: 10
-    dead: 0
+    dead: 0.5
     sensitivity: 1
     snap: 1
     invert: 0
@@ -157,8 +157,8 @@ InputManager:
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 0
-    dead: 0.19
+    gravity: 10
+    dead: 0.5
     sensitivity: 1
     snap: 0
     invert: 0
@@ -173,11 +173,11 @@ InputManager:
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 0
-    dead: 0.19
+    gravity: 10
+    dead: 0.5
     sensitivity: 1
     snap: 0
-    invert: 1
+    invert: 0
     type: 2
     axis: 1
     joyNum: 0
@@ -254,11 +254,27 @@ InputManager:
     altNegativeButton: q
     altPositiveButton: e
     gravity: 10
-    dead: 0
+    dead: 0.5
     sensitivity: 1
     snap: 0
     invert: 0
     type: 0
+    axis: 2
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: LT/RT
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 10
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
     axis: 2
     joyNum: 0
   - serializedVersion: 3
@@ -270,11 +286,27 @@ InputManager:
     altNegativeButton: j
     altPositiveButton: l
     gravity: 10
-    dead: 0
+    dead: 0.5
     sensitivity: 1
     snap: 0
     invert: 0
     type: 0
+    axis: 3
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: R-Horizontal
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 10
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
     axis: 3
     joyNum: 0
   - serializedVersion: 3
@@ -286,11 +318,27 @@ InputManager:
     altNegativeButton: k
     altPositiveButton: i
     gravity: 10
-    dead: 0
+    dead: 0.5
     sensitivity: 1
     snap: 0
     invert: 0
     type: 0
+    axis: 4
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: R-Vertical
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 10
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
     axis: 4
     joyNum: 0
   - serializedVersion: 3

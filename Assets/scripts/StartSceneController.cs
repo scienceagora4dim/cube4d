@@ -10,13 +10,13 @@ public class StartSceneController : MonoBehaviour
 	/// n次元のij平面回転角が第m成分（ここでは使わない）: m = n(i-1)-i(i+1)/2+j-1;
 	public float[] Angles = new float[6];	
 
+	/*
     /// <summary>
     /// X軸/YZ平面回転用スライダー
     /// </summary>
     [SerializeField, Tooltip("X軸回転用スライダー")]
     private LabeledSliderController rotateXSlider;
 
-	/*
     /// <summary>
     /// Y軸/XZ平面回転用スライダー
     /// </summary>
@@ -51,9 +51,10 @@ public class StartSceneController : MonoBehaviour
     /// <summary>
     /// 超立方体オブジェクト
     /// </summary>
-    [SerializeField, Tooltip("超立方体")]
-    private CubeController cube;
-
+    //[SerializeField, Tooltip("超立方体")]
+    //private CubeController cube;
+	public CubeController cube;
+	public CubeController cubeleft;
     /// <summary>
     /// シーン開始時の処理
     /// </summary>
@@ -87,6 +88,10 @@ public class StartSceneController : MonoBehaviour
         cube.gameObject.transform.eulerAngles
 				= new Vector3(Angles[3], Angles[1], Angles[0]);
         cube.wAngles 
+				= new Vector3(Angles[2], Angles[4], Angles[5]);
+        cubeleft.gameObject.transform.eulerAngles
+				= new Vector3(Angles[3], Angles[1], Angles[0]);
+        cubeleft.wAngles 
 				= new Vector3(Angles[2], Angles[4], Angles[5]);
 	}
 }
