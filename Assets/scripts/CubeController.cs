@@ -38,6 +38,9 @@ public class CubeController : MonoBehaviour
     // テクスチャプロパティID
     private int mainTextureId_;
 
+    // シーンコントローラー
+    private StartSceneController scene_;
+
     /// <summary>
     /// ゲーム開始時の処理
     /// </summary>
@@ -46,6 +49,7 @@ public class CubeController : MonoBehaviour
         meshRenderer_ = GetComponent<MeshRenderer>();
         cubeRotationId_ = Shader.PropertyToID("_CubeRotation");
         mainTextureId_ = Shader.PropertyToID("_MainTex");
+        scene_ = GetComponentInParent<StartSceneController>();
 
         Vector4[] vertices = new Vector4[]
         {
@@ -304,16 +308,18 @@ public class CubeController : MonoBehaviour
     /// シーン開始時の処理
     /// </summary>
 	void Start ()
-    {
+    {   
+        /*
+        MovieTexture texture = (MovieTexture)meshRenderer_.material.GetTexture(mainTextureId_);
+        texture.loop = true;
+        texture.Play();
+        */
+
         gameObject.AddComponent<MeshFilter>().mesh = mesh_;
 
         // ダミーオブジェクトを非表示にする
         transform.FindChild("Dummy").gameObject.SetActive(false);
         //transform.FindChild("Dummy-Left").gameObject.SetActive(false);
-
-        MovieTexture texture = (MovieTexture)meshRenderer_.material.GetTexture(mainTextureId_);
-        texture.loop = true;
-        texture.Play();
     }
 	
     /// <summary>
@@ -321,6 +327,10 @@ public class CubeController : MonoBehaviour
     /// </summary>
 	void Update ()
     {
+        if(scene_ != null && scene_.webCameraTexture != null)
+        {
+            meshRenderer_.material.SetTexture(mainTextureId_, scene_.webCameraTexture);
+        }
         meshRenderer_.material.SetVector(cubeRotationId_, wAngles);
     }
 

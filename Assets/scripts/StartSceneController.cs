@@ -6,9 +6,18 @@ using System.Collections;
 /// </summary>
 public class StartSceneController : MonoBehaviour
 {
-	/// 4次元の回転角 ij平面：xy(12), xz(13), xw(14), yz(23), yw(24), zw(34)
-	/// n次元のij平面回転角が第m成分（ここでは使わない）: m = n(i-1)-i(i+1)/2+j-1;
-	public float[] Angles = new float[6];	
+    private const int CAMERA_WIDTH = 320;
+    private const int CAMERA_HEIGHT = 240;
+    private const int FPS = 30;
+
+    /// 4次元の回転角 ij平面：xy(12), xz(13), xw(14), yz(23), yw(24), zw(34)
+    /// n次元のij平面回転角が第m成分（ここでは使わない）: m = n(i-1)-i(i+1)/2+j-1;
+    public float[] Angles = new float[6];
+
+    /// <summary>
+    /// Webカメラテクスチャ
+    /// </summary>
+    public WebCamTexture webCameraTexture;
 
 	/*
     /// <summary>
@@ -60,8 +69,19 @@ public class StartSceneController : MonoBehaviour
     /// </summary>
 	void Start ()
     {
-	
-	}
+        WebCamDevice[] devices = WebCamTexture.devices;
+        // display all cameras
+        for (var i = 0; i < devices.Length; i++)
+        {
+            Debug.Log(devices[i].name);
+        }
+
+        if (devices.Length > 0)
+        {
+            webCameraTexture = new WebCamTexture(devices[0].name, CAMERA_WIDTH, CAMERA_HEIGHT, FPS);
+            webCameraTexture.Play();
+        }
+    }
 	
     /// <summary>
     /// 毎フレームの処理
