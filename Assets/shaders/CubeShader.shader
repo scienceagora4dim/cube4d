@@ -3,6 +3,7 @@
 	Properties
 	{
 		_CubeRotation ("Cube rotation", Vector) = (0, 0, 0, 0)
+		_MainTex("Main Texture (RGB)", 2D) = "white" {}
 	}
 
 	SubShader
@@ -25,6 +26,9 @@
 
 			/// 立方体のW軸が関わる回転
 			float4 _CubeRotation;
+
+			/// テクスチャID
+			sampler2D _MainTex;
 
 			/// 投影用の行列
 			float4x4 makeProjection()
@@ -96,6 +100,7 @@
 				float4 vertex : POSITION;
 				float4 color : COLOR0;
 				float2 uv : TEXCOORD0;
+				float2 uv2 : TEXCOORD1;
 			};
 
 			/**
@@ -107,6 +112,7 @@
 			{
 				float4 vertex : SV_POSITION;
 				float4 color : COLOR0;
+				float2 uv : TEXCOORD1;
 			};
 
 			/**
@@ -140,6 +146,7 @@
 
 				// 頂点色の引継ぎ
 				o.color = v.color;
+				o.uv = v.uv2;
 				return o;
 			}
 			
@@ -152,7 +159,7 @@
 			float4 frag(v2f i) : SV_Target
 			{
 				// 頂点色をそのまま返す。
-				return i.color;
+				return tex2D(_MainTex, i.uv.xy);
 			}
 			ENDCG
 		}

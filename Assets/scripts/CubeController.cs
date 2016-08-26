@@ -35,6 +35,9 @@ public class CubeController : MonoBehaviour
     // 回転角度プロパティID
     private int cubeRotationId_;
 
+    // テクスチャプロパティID
+    private int mainTextureId_;
+
     /// <summary>
     /// ゲーム開始時の処理
     /// </summary>
@@ -42,6 +45,7 @@ public class CubeController : MonoBehaviour
     {
         meshRenderer_ = GetComponent<MeshRenderer>();
         cubeRotationId_ = Shader.PropertyToID("_CubeRotation");
+        mainTextureId_ = Shader.PropertyToID("_MainTex");
 
         Vector4[] vertices = new Vector4[]
         {
@@ -102,8 +106,38 @@ public class CubeController : MonoBehaviour
             rgba(0.0f, 0.0f, 1.0f, ALPHA), //blue
             rgba(1.0f, 1.0f, 0.0f, ALPHA), //yellow
         };
+
+        // テクスチャ座標の設定
+        Vector2[] uvs = new Vector2[]
+        {
+            // 手前の面
+            vec( 0.0f,  0.0f), //0
+            vec( 1.0f,  0.0f), //1
+            vec( 1.0f,  1.0f), //2
+            vec( 0.0f,  1.0f), //3
+
+            // 奥の面
+            vec( 0.0f,  0.0f), //0
+            vec( 1.0f,  0.0f), //1
+            vec( 1.0f,  1.0f), //2
+            vec( 0.0f,  1.0f), //3
+
+            // 手前の面
+            vec( 0.0f,  0.0f), //0
+            vec( 1.0f,  0.0f), //1
+            vec( 1.0f,  1.0f), //2
+            vec( 0.0f,  1.0f), //3
+
+            // 奥の面
+            vec( 0.0f,  0.0f), //0
+            vec( 1.0f,  0.0f), //1
+            vec( 1.0f,  1.0f), //2
+            vec( 0.0f,  1.0f), //3
+        };
+
+        mesh_.uv2 = uvs;
         
-        if(lines)
+        if (lines)
         {
             // 輪郭線の定義
             mesh_.SetIndices(new int[] {
@@ -276,6 +310,10 @@ public class CubeController : MonoBehaviour
         // ダミーオブジェクトを非表示にする
         transform.FindChild("Dummy").gameObject.SetActive(false);
         //transform.FindChild("Dummy-Left").gameObject.SetActive(false);
+
+        MovieTexture texture = (MovieTexture)meshRenderer_.material.GetTexture(mainTextureId_);
+        texture.loop = true;
+        texture.Play();
     }
 	
     /// <summary>
