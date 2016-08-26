@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.VR;
 using System.Collections;
 
 /// <summary>
@@ -6,10 +7,6 @@ using System.Collections;
 /// </summary>
 public class StartSceneController : MonoBehaviour
 {
-	/// 4次元の回転角 ij平面：xy(12), xz(13), xw(14), yz(23), yw(24), zw(34)
-	/// n次元のij平面回転角が第m成分（ここでは使わない）: m = n(i-1)-i(i+1)/2+j-1;
-	public float[] Angles = new float[6];	
-
 	/*
     /// <summary>
     /// X軸/YZ平面回転用スライダー
@@ -51,10 +48,9 @@ public class StartSceneController : MonoBehaviour
     /// <summary>
     /// 超立方体オブジェクト
     /// </summary>
-    //[SerializeField, Tooltip("超立方体")]
-    //private CubeController cube;
-	public CubeController cube;
-	public CubeController cubeleft;
+    [SerializeField, Tooltip("超立方体")]
+	public Transform_4D hypercube;
+
     /// <summary>
     /// シーン開始時の処理
     /// </summary>
@@ -70,28 +66,19 @@ public class StartSceneController : MonoBehaviour
     {
 		/*
 		/// Slider使用時
-		Angles[0] = rotateZSlider.value * 360.0f;
-		Angles[1] = rotateYSlider.value * 360.0f;
-		Angles[2] = rotateWXSlider.value * 360.0f;
-		Angles[3] = rotateXSlider.value * 360.0f;
-		Angles[4] = rotateWYSlider.value * 360.0f;
-		Angles[5] = rotateWZSlider.value * 360.0f;
+		hypercube.Rotation1.x = rotateZSlider.value * 360.0f;
+		hypercube.Rotation1.y = rotateYSlider.value * 360.0f;
+		hypercube.Rotation1.z = rotateWXSlider.value * 360.0f;
+		hypercube.Rotation2.x = rotateXSlider.value * 360.0f;
+		hypercube.Rotation2.y = rotateWYSlider.value * 360.0f;
+		hypercube.Rotation2.z = rotateWZSlider.value * 360.0f;
 		*/
 
 		float rotationSpeed = 3f;
-		Angles[0] = Angles[0] + Input.GetAxis("R-Horizontal") * rotationSpeed;
-		Angles[2] = Angles[2] + Input.GetAxis("LT/RT") * rotationSpeed;
-		Angles[3] = Angles[3] + Input.GetAxis("R-Vertical") * rotationSpeed;
-		Angles[4] = Angles[4] + Input.GetAxis("Horizontal") * rotationSpeed;
-		Angles[5] = Angles[5] + Input.GetAxis("Vertical") * rotationSpeed;
-
-        cube.gameObject.transform.eulerAngles
-				= new Vector3(Angles[3], Angles[1], Angles[0]);
-        cube.wAngles 
-				= new Vector3(Angles[2], Angles[4], Angles[5]);
-        cubeleft.gameObject.transform.eulerAngles
-				= new Vector3(Angles[3], Angles[1], Angles[0]);
-        cubeleft.wAngles 
-				= new Vector3(Angles[2], Angles[4], Angles[5]);
+		hypercube.Rotation1.x += Input.GetAxis("R-Horizontal") * rotationSpeed;
+		hypercube.Rotation1.y += Input.GetAxis("LT/RT") * rotationSpeed;
+		hypercube.Rotation1.z += Input.GetAxis("R-Vertical") * rotationSpeed;
+		hypercube.Rotation2.x += Input.GetAxis("Horizontal") * rotationSpeed;
+		hypercube.Rotation2.y += Input.GetAxis("Vertical") * rotationSpeed;
 	}
 }

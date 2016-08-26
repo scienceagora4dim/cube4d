@@ -19,12 +19,18 @@ public class CubeController : MonoBehaviour
     /// </summary>
     [SerializeField, Tooltip("線のみ描画するかどうか")]
     private bool lines;
+   
+   	/// <summary>
+    /// 親オブジェクト
+    /// </summary>
+    [SerializeField, Tooltip("親オブジェクト")]
+	public Transform_4D parent;
 
     /// <summary>
     /// W軸関連の回転角度
     /// </summary>
-    [SerializeField, Tooltip("W軸関連の回転角度")]
-    public Vector3 wAngles;
+    //[SerializeField, Tooltip("W軸関連の回転角度")]
+    //public Vector3 wAngles;
 
     // 生成されたメッシュオブジェクト
     private Mesh mesh_;
@@ -33,7 +39,8 @@ public class CubeController : MonoBehaviour
     private MeshRenderer meshRenderer_;
 
     // 回転角度プロパティID
-    private int cubeRotationId_;
+    private int cubeRotation1Id_;
+    private int cubeRotation2Id_;
 
     /// <summary>
     /// ゲーム開始時の処理
@@ -41,7 +48,8 @@ public class CubeController : MonoBehaviour
     void Awake()
     {
         meshRenderer_ = GetComponent<MeshRenderer>();
-        cubeRotationId_ = Shader.PropertyToID("_CubeRotation");
+        cubeRotation1Id_ = Shader.PropertyToID("_CubeRotation1");
+        cubeRotation2Id_ = Shader.PropertyToID("_CubeRotation2");
 
         Vector4[] vertices = new Vector4[]
         {
@@ -273,9 +281,8 @@ public class CubeController : MonoBehaviour
     {
         gameObject.AddComponent<MeshFilter>().mesh = mesh_;
 
-        // ダミーオブジェクトを非表示にする
-        transform.FindChild("Dummy").gameObject.SetActive(false);
-        //transform.FindChild("Dummy-Left").gameObject.SetActive(false);
+        // ダミーオブジェクトを非表示にする		
+		transform.FindChild("Dummy").gameObject.SetActive(false);
     }
 	
     /// <summary>
@@ -283,7 +290,8 @@ public class CubeController : MonoBehaviour
     /// </summary>
 	void Update ()
     {
-        meshRenderer_.material.SetVector(cubeRotationId_, wAngles);
+        meshRenderer_.material.SetVector(cubeRotation1Id_, parent.Rotation1);
+        meshRenderer_.material.SetVector(cubeRotation2Id_, parent.Rotation2);
     }
 
     /// <summary>
