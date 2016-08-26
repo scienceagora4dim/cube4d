@@ -20,11 +20,11 @@ public class CubeController : MonoBehaviour
     [SerializeField, Tooltip("線のみ描画するかどうか")]
     private bool lines;
    
+   	/// <summary>
+    /// 親オブジェクト
+    /// </summary>
     [SerializeField, Tooltip("親オブジェクト")]
 	public Transform_4D parent;
-
-    [SerializeField, Tooltip("カメラオブジェクト")]
-	public Transform_4D eye;
 
     /// <summary>
     /// W軸関連の回転角度
@@ -38,22 +38,9 @@ public class CubeController : MonoBehaviour
     // メッシュ描画設定
     private MeshRenderer meshRenderer_;
 
-	// プロパティID
-    // モデル原点のワールド座標
-	private int cubePositionId_;
-    // モデルの向きを定める回転角度
+    // 回転角度プロパティID
     private int cubeRotation1Id_;
     private int cubeRotation2Id_;
-    // モデルの拡大率
-	private int cubeScaleId_;
-	// カメラのワールド座標
-    private int cameraPositionId_;
-	// カメラの向きを定める回転角度
-    private int cameraRotation1Id_;
-    private int cameraRotation2Id_;
-
-    // テクスチャプロパティID
-    private int mainTextureId_;
 
     /// <summary>
     /// ゲーム開始時の処理
@@ -61,14 +48,8 @@ public class CubeController : MonoBehaviour
     void Awake()
     {
         meshRenderer_ = GetComponent<MeshRenderer>();
-        mainTextureId_ = Shader.PropertyToID("_MainTex");
-        cubePositionId_ = Shader.PropertyToID("_CubePosition");
         cubeRotation1Id_ = Shader.PropertyToID("_CubeRotation1");
         cubeRotation2Id_ = Shader.PropertyToID("_CubeRotation2");
-        cubeScaleId_ = Shader.PropertyToID("_CubeScale");
-        cameraPositionId_ = Shader.PropertyToID("_CameraPosition");
-        cameraRotation1Id_ = Shader.PropertyToID("_CameraRotation1");
-        cameraRotation2Id_ = Shader.PropertyToID("_CameraRotation2");
 
         Vector4[] vertices = new Vector4[]
         {
@@ -129,38 +110,8 @@ public class CubeController : MonoBehaviour
             rgba(0.0f, 0.0f, 1.0f, ALPHA), //blue
             rgba(1.0f, 1.0f, 0.0f, ALPHA), //yellow
         };
-
-        // テクスチャ座標の設定
-        Vector2[] uvs = new Vector2[]
-        {
-            // 手前の面
-            vec( 0.0f,  0.0f), //0
-            vec( 1.0f,  0.0f), //1
-            vec( 1.0f,  1.0f), //2
-            vec( 0.0f,  1.0f), //3
-
-            // 奥の面
-            vec( 0.0f,  0.0f), //0
-            vec( 1.0f,  0.0f), //1
-            vec( 1.0f,  1.0f), //2
-            vec( 0.0f,  1.0f), //3
-
-            // 手前の面
-            vec( 0.0f,  0.0f), //0
-            vec( 1.0f,  0.0f), //1
-            vec( 1.0f,  1.0f), //2
-            vec( 0.0f,  1.0f), //3
-
-            // 奥の面
-            vec( 0.0f,  0.0f), //0
-            vec( 1.0f,  0.0f), //1
-            vec( 1.0f,  1.0f), //2
-            vec( 0.0f,  1.0f), //3
-        };
-
-        mesh_.uv2 = uvs;
         
-        if (lines)
+        if(lines)
         {
             // 輪郭線の定義
             mesh_.SetIndices(new int[] {
@@ -330,12 +281,8 @@ public class CubeController : MonoBehaviour
     {
         gameObject.AddComponent<MeshFilter>().mesh = mesh_;
 
-        // ダミーオブジェクトを非表示にする
-        transform.FindChild("Dummy").gameObject.SetActive(false);
-
-        MovieTexture texture = (MovieTexture)meshRenderer_.material.GetTexture(mainTextureId_);
-        texture.loop = true;
-        texture.Play();
+        // ダミーオブジェクトを非表示にする		
+		transform.FindChild("Dummy").gameObject.SetActive(false);
     }
 	
     /// <summary>
@@ -343,15 +290,8 @@ public class CubeController : MonoBehaviour
     /// </summary>
 	void Update ()
     {
-        meshRenderer_.material.SetVector(cubePositionId_, parent.Position);
-        // Vector4 でないので以下は少し変
-		meshRenderer_.material.SetVector(cubeRotation1Id_, parent.Rotation1);
+        meshRenderer_.material.SetVector(cubeRotation1Id_, parent.Rotation1);
         meshRenderer_.material.SetVector(cubeRotation2Id_, parent.Rotation2);
-        meshRenderer_.material.SetVector(cubeScaleId_, parent.Scale);
-        meshRenderer_.material.SetVector(cameraPositionId_, eye.Position);
-        // Vector4 でないので以下は少し変
-		meshRenderer_.material.SetVector(cameraRotation1Id_, eye.Rotation1);
-        meshRenderer_.material.SetVector(cameraRotation2Id_, eye.Rotation2);
     }
 
     /// <summary>
