@@ -75,10 +75,9 @@ public class StartSceneController : MonoBehaviour
 		*/
 
 		float rotationSpeed = 3f;
-		hypercube.Rotation1.x += Input.GetAxis("R-Horizontal") * rotationSpeed;
-		hypercube.Rotation1.y += Input.GetAxis("LT/RT") * rotationSpeed;
-		hypercube.Rotation1.z += Input.GetAxis("R-Vertical") * rotationSpeed;
-		hypercube.Rotation2.x += Input.GetAxis("Horizontal") * rotationSpeed;
-		hypercube.Rotation2.y += Input.GetAxis("Vertical") * rotationSpeed;
+		hypercube.Rotation1.y += Input.GetAxis("R-Horizontal") * rotationSpeed;
+		hypercube.Rotation1.z += Input.GetAxis("Horizontal") * rotationSpeed;
+		hypercube.Rotation2.x += Input.GetAxis("R-Vertical") * rotationSpeed;
+		hypercube.Rotation2.z += Input.GetAxis("Vertical") * rotationSpeed;
 	}
 }
