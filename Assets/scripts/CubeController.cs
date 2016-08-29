@@ -20,11 +20,11 @@ public class CubeController : MonoBehaviour
     [SerializeField, Tooltip("線のみ描画するかどうか")]
     private bool lines;
    
-   	/// <summary>
-    /// 親オブジェクト
-    /// </summary>
     [SerializeField, Tooltip("親オブジェクト")]
 	public Transform_4D parent;
+
+    [SerializeField, Tooltip("カメラオブジェクト")]
+	public Transform_4D eye;
 
     /// <summary>
     /// W軸関連の回転角度
@@ -38,9 +38,19 @@ public class CubeController : MonoBehaviour
     // メッシュ描画設定
     private MeshRenderer meshRenderer_;
 
-    // 回転角度プロパティID
+	// プロパティID
+    // モデル原点のワールド座標
+	private int cubePositionId_;
+    // モデルの向きを定める回転角度
     private int cubeRotation1Id_;
     private int cubeRotation2Id_;
+    // モデルの拡大率
+	private int cubeScaleId_;
+	// カメラのワールド座標
+    private int cameraPositionId_;
+	// カメラの向きを定める回転角度
+    private int cameraRotation1Id_;
+    private int cameraRotation2Id_;
 
     /// <summary>
     /// ゲーム開始時の処理
@@ -48,8 +58,14 @@ public class CubeController : MonoBehaviour
     void Awake()
     {
         meshRenderer_ = GetComponent<MeshRenderer>();
+
+        cubePositionId_ = Shader.PropertyToID("_CubePosition");
         cubeRotation1Id_ = Shader.PropertyToID("_CubeRotation1");
         cubeRotation2Id_ = Shader.PropertyToID("_CubeRotation2");
+        cubeScaleId_ = Shader.PropertyToID("_CubeScale");
+        cameraPositionId_ = Shader.PropertyToID("_CameraPosition");
+        cameraRotation1Id_ = Shader.PropertyToID("_CameraRotation1");
+        cameraRotation2Id_ = Shader.PropertyToID("_CameraRotation2");
 
         Vector4[] vertices = new Vector4[]
         {
@@ -290,8 +306,15 @@ public class CubeController : MonoBehaviour
     /// </summary>
 	void Update ()
     {
-        meshRenderer_.material.SetVector(cubeRotation1Id_, parent.Rotation1);
+        meshRenderer_.material.SetVector(cubePositionId_, parent.Position);
+        // Vector4 でないので以下は少し変
+		meshRenderer_.material.SetVector(cubeRotation1Id_, parent.Rotation1);
         meshRenderer_.material.SetVector(cubeRotation2Id_, parent.Rotation2);
+        meshRenderer_.material.SetVector(cubeScaleId_, parent.Scale);
+        meshRenderer_.material.SetVector(cameraPositionId_, eye.Position);
+        // Vector4 でないので以下は少し変
+		meshRenderer_.material.SetVector(cameraRotation1Id_, eye.Rotation1);
+        meshRenderer_.material.SetVector(cameraRotation2Id_, eye.Rotation2);
     }
 
     /// <summary>

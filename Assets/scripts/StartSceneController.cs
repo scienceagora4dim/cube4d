@@ -50,6 +50,10 @@ public class StartSceneController : MonoBehaviour
     /// </summary>
     [SerializeField, Tooltip("超立方体")]
 	public Transform_4D hypercube;
+    [SerializeField, Tooltip("右目")]
+	public Transform_4D RightEyeCamera;
+    [SerializeField, Tooltip("左目")]
+	public Transform_4D LeftEyeCamera;
 
     /// <summary>
     /// シーン開始時の処理
@@ -79,5 +83,19 @@ public class StartSceneController : MonoBehaviour
 		hypercube.Rotation1.z += Input.GetAxis("Horizontal") * rotationSpeed;
 		hypercube.Rotation2.x += Input.GetAxis("R-Vertical") * rotationSpeed;
 		hypercube.Rotation2.z += Input.GetAxis("Vertical") * rotationSpeed;
+
+		RightEyeCamera.Position =  //InputTracking.GetLocalPosition(VRNode.CenterEye)
+				//-InputTracking.GetLocalPosition(VRNode.RightEye)+
+				RightEyeCamera.gameObject.transform.localPosition;
+		RightEyeCamera.Rotation1 = 
+				//-InputTracking.GetLocalRotation(VRNode.RightEye).eulerAngles+
+				RightEyeCamera.gameObject.transform.localRotation.eulerAngles;
+		LeftEyeCamera.Rotation1 = 
+				//-InputTracking.GetLocalRotation(VRNode.RightEye).eulerAngles+
+				LeftEyeCamera.gameObject.transform.localRotation.eulerAngles;
+		LeftEyeCamera.Position = //InputTracking.GetLocalPosition(VRNode.CenterEye)
+				//-InputTracking.GetLocalPosition(VRNode.LeftEye)+
+				LeftEyeCamera.gameObject.transform.localPosition;
+
 	}
 }

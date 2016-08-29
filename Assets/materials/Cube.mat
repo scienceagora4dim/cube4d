@@ -16,7 +16,4 @@ Material:
     serializedVersion: 2
     m_TexEnvs: []
     m_Floats: []
-    m_Colors:
-    - first:
-        name: _CubeRotation
-      second: {r: 0, g: 0, b: 0, a: 0}
+    m_Colors: []
