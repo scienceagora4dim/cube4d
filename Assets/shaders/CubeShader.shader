@@ -38,7 +38,7 @@
 					1.0f, 0.0f, 0.0f, 0.0f,
 					0.0f, 1.0f, 0.0f, 0.0f,
 					0.0f, 0.0f, 1.0f, 0.0f,
-					0.0f, 0.0f, 0.0f, 0.0f,
+					0.0f, 0.0f, 0.0f, 0.0f, // この行はなんでもよい
 				};
 				return result;
 			}
@@ -50,10 +50,10 @@
 				float s = sin(theta);
 				const float4x4 result =
 				{
-					   c, 0.0f, 0.0f,    s,
-					0.0f, 1.0f, 0.0f, 0.0f,
+					   c,   -s, 0.0f, 0.0f,
+					   s,    c, 0.0f, 0.0f,
 					0.0f, 0.0f, 1.0f, 0.0f,
-					  -s, 0.0f, 0.0f,    c,
+					0.0f, 0.0f, 0.0f, 1.0f,
 				};
 				return result;
 			}
@@ -65,10 +65,10 @@
 				float s = sin(theta);
 				const float4x4 result =
 				{
-					   c, 0.0f, 0.0f,    s,
+					   c, 0.0f,   -s, 0.0f,
 					0.0f, 1.0f, 0.0f, 0.0f,
-					0.0f, 0.0f, 1.0f, 0.0f,
-					  -s, 0.0f, 0.0f,    c,
+					   s, 0.0f,    c, 0.0f,
+					0.0f, 0.0f, 0.0f, 1.0f,
 				};
 				return result;
 			}
@@ -96,9 +96,9 @@
 				const float4x4 result =
 				{
 					1.0f, 0.0f, 0.0f, 0.0f,
-					0.0f,    c, 0.0f,   -s,
-					0.0f, 0.0f, 1.0f, 0.0f,
-					0.0f,    s, 0.0f,    c,
+					0.0f,    c,   -s, 0.0f,
+					0.0f,    s,    c, 0.0f,
+					0.0f, 0.0f, 0.0f, 1.0f,
 				};
 				return result;
 			}
@@ -127,8 +127,8 @@
 				{
 					1.0f, 0.0f, 0.0f, 0.0f,
 					0.0f, 1.0f, 0.0f, 0.0f,
-					0.0f, 0.0f, c,    -s,
-					0.0f, 0.0f, s,    c,
+					0.0f, 0.0f,    c,   -s,
+					0.0f, 0.0f,    s,    c,
 				};
 				return result;
 			}
@@ -175,17 +175,16 @@
 				float4x4 Ryw = makeRotateYW(radians(_CubeRotation2.y));
 				float4x4 Rzw = makeRotateZW(radians(_CubeRotation2.z));
 
-				// 立方体の頂点の座標を回転する(W軸が関わるものだけ)
+				// 立方体の頂点の座標を回転する
 				float4 vertex = float4(v.vertex.xyz, v.uv.x);
 				vertex = mul(Rxy, mul(Rxz, mul(Rxw, mul(Ryz, mul(Ryw, mul(Rzw, vertex))))));
 
-				// W軸の値をxyzに加算して、W軸はつぶすことで投影を行う。
-				// TODO: もっと別の方法を考える
+				// 投影を行う。
 				float4x4 p = makeProjection();
 				vertex = mul(p, vertex);
 				vertex.w = 1;
 
-				// 3次元MVP変換(通常の3次元回転はこちらで行う)
+				// 3次元MVP変換
 				o.vertex = mul(UNITY_MATRIX_MVP, vertex);
 
 				// 頂点色の引継ぎ
