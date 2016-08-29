@@ -2,8 +2,13 @@
 {
 	Properties
 	{
+		_CubePosition ("Cube position", Vector) = (0, 0, 0, 0)
 		_CubeRotation1 ("Cube rotation 1", Vector) = (0, 0, 0, 0)
-		_CubeRotation2 ("Cube rotation 2", Vector) = (1, 0, 0, 0)
+		_CubeRotation2 ("Cube rotation 2", Vector) = (0, 0, 0, 0)
+		_CubeScale ("Cube scale", Vector) = (0, 0, 0, 0)
+		_CameraPosition ("Camera position", Vector) = (0, 0, 0, 0)
+		_CameraRotation1 ("Camera rotation 1", Vector) = (0, 0, 0, 0)
+		_CameraRotation2 ("Camera rotation 2", Vector) = (0, 0, 0, 0)
 	}
 
 	SubShader
@@ -24,25 +29,14 @@
 
 			#include "UnityCG.cginc"
 
-			/// 回転
+			float4 _CubePosition;
 			float4 _CubeRotation1;
 			float4 _CubeRotation2;
-
-			/// 投影用の行列
-			float4x4 makeProjection()
-			{
-				// XYZ各座標にWの値を加算する。
-				// Wは0にする。
-				const float4x4 result =
-				{
-					1.0f, 0.0f, 0.0f, 0.0f,
-					0.0f, 1.0f, 0.0f, 0.0f,
-					0.0f, 0.0f, 1.0f, 0.0f,
-					0.0f, 0.0f, 0.0f, 0.0f, // この行はなんでもよい
-				};
-				return result;
-			}
-
+			float4 _CubeScale;
+			float4 _CameraPosition;
+			float4 _CameraRotation1;
+			float4 _CameraRotation2;
+			
 			/// XY平面回転行列を生成する
 			float4x4 makeRotateXY(float theta)
 			{
@@ -96,8 +90,8 @@
 				const float4x4 result =
 				{
 					1.0f, 0.0f, 0.0f, 0.0f,
-					0.0f,    c,   -s, 0.0f,
-					0.0f,    s,    c, 0.0f,
+					0.0f,    c,    s, 0.0f,
+					0.0f,   -s,    c, 0.0f,
 					0.0f, 0.0f, 0.0f, 1.0f,
 				};
 				return result;
@@ -133,6 +127,40 @@
 				return result;
 			}
 
+
+			// 以下実際の値を代入して、各フレームで一度だけ行う計算を終えておく。
+			// 4次元回転行列の生成
+			static float4x4 Mxy = makeRotateXY(radians(_CubeRotation1.z));
+			static float4x4 Mxz = makeRotateXZ(radians(_CubeRotation1.y));
+			static float4x4 Mxw = makeRotateXW(radians(_CubeRotation2.x));
+			static float4x4 Myz = makeRotateYZ(radians(_CubeRotation1.x));
+			static float4x4 Myw = makeRotateYW(radians(_CubeRotation2.y));
+			static float4x4 Mzw = makeRotateZW(radians(_CubeRotation2.z));
+			static float4x4 Rotation4D = 
+					mul(Mzw, mul(Myw, mul(Myz, mul(Mxw, mul(Mxz, Mxy)))));
+
+			// カメラの4次元回転行列の生成
+			static float4x4 Cxy = makeRotateXY(radians(_CameraRotation1.z));
+			static float4x4 Cxz = makeRotateXZ(radians(_CameraRotation1.y));
+			static float4x4 Cxw = makeRotateXW(radians(_CameraRotation2.x));
+			static float4x4 Cyz = makeRotateYZ(radians(_CameraRotation1.x));
+			static float4x4 Cyw = makeRotateYW(radians(_CameraRotation2.y));
+			static float4x4 Czw = makeRotateZW(radians(_CameraRotation2.z));
+			static float4x4 CameraRotation4D = 
+					mul(Czw, mul(Cyw, mul(Cyz, mul(Cxw, mul(Cxz, Cxy)))));
+
+
+			//TODO: ちゃんと5x5の行列として扱う。
+			// モデルビュー変換の回転部分
+			static float4x4 RotationMV = mul(transpose(CameraRotation4D), Rotation4D);
+					
+					//;
+			// モデルビュー変換の平行移動部分
+			static float4 TranslationMV = 
+					mul(transpose(CameraRotation4D), _CubePosition)+
+					mul(transpose(CameraRotation4D), _CameraPosition); 
+
+
 			/**
 			 *	頂点データ構造体
 			 *
@@ -167,25 +195,17 @@
 			{
 				v2f o;
 
-				// 4次元回転行列
-				float4x4 Rxy = makeRotateXY(radians(_CubeRotation1.x));
-				float4x4 Rxz = makeRotateXZ(radians(_CubeRotation1.y));
-				float4x4 Rxw = makeRotateXW(radians(_CubeRotation1.z));
-				float4x4 Ryz = makeRotateYZ(radians(_CubeRotation2.x));
-				float4x4 Ryw = makeRotateYW(radians(_CubeRotation2.y));
-				float4x4 Rzw = makeRotateZW(radians(_CubeRotation2.z));
-
-				// 立方体の頂点の座標を回転する
 				float4 vertex = float4(v.vertex.xyz, v.uv.x);
-				vertex = mul(Rxy, mul(Rxz, mul(Rxw, mul(Ryz, mul(Ryw, mul(Rzw, vertex))))));
+				float baffa;
 
-				// 投影を行う。
-				float4x4 p = makeProjection();
-				vertex = mul(p, vertex);
+				// 4次元のモデル・ビュー変換を行う。
+				vertex = mul(RotationMV, vertex)+TranslationMV;
+
+				baffa = vertex.w;
 				vertex.w = 1;
 
 				// 3次元MVP変換
-				o.vertex = mul(UNITY_MATRIX_MVP, vertex);
+				o.vertex = mul(UNITY_MATRIX_P, vertex);
 
 				// 頂点色の引継ぎ
 				o.color = v.color;
