@@ -2,7 +2,6 @@
 {
 	Properties
 	{
-		_MainTex("Main Texture (RGB)", 2D) = "white" {}
 		_CubePosition ("Cube position", Vector) = (0, 0, 0, 0)
 		_CubeRotation1 ("Cube rotation 1", Vector) = (0, 0, 0, 0)
 		_CubeRotation2 ("Cube rotation 2", Vector) = (0, 0, 0, 0)
@@ -52,9 +51,6 @@
 				};
 				return result;
 			}
-
-			/// テクスチャID
-			sampler2D _MainTex;
 
 			/// XZ平面回転行列を生成する
 			float4x4 makeRotateXZ(float theta)
@@ -158,6 +154,7 @@
 			// モデルビュー変換の回転部分
 			static float4x4 RotationMV = mul(transpose(CameraRotation4D), Rotation4D);
 					
+					//;
 			// モデルビュー変換の平行移動部分
 			static float4 TranslationMV = 
 					mul(transpose(CameraRotation4D), _CubePosition)-
@@ -178,7 +175,6 @@
 				float4 vertex : POSITION;
 				float4 color : COLOR0;
 				float2 uv : TEXCOORD0;
-				float2 uv2 : TEXCOORD1;
 			};
 
 			/**
@@ -190,7 +186,6 @@
 			{
 				float4 vertex : SV_POSITION;
 				float4 color : COLOR0;
-				float2 uv : TEXCOORD1;
 			};
 
 			/**
@@ -222,7 +217,6 @@
 
 				// 頂点色の引継ぎ
 				o.color = v.color;
-				o.uv = v.uv2;
 				return o;
 			}
 			
@@ -235,7 +229,7 @@
 			float4 frag(v2f i) : SV_Target
 			{
 				// 頂点色をそのまま返す。
-				return tex2D(_MainTex, i.uv.xy);
+				return i.color;
 			}
 			ENDCG
 		}

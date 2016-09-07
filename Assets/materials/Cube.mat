@@ -14,33 +14,6 @@ Material:
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 15200000, guid: 6cf6308cff18d404488936e57b956cae, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Floats: []
-    m_Colors:
-    - first:
-        name: _CameraPosition
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _CameraRotation1
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _CameraRotation2
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _CubePosition
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _CubeRotation1
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _CubeRotation2
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _CubeScale
-      second: {r: 0, g: 0, b: 0, a: 0}
+    m_Colors: []
