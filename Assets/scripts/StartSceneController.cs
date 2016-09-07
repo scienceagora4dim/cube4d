@@ -50,6 +50,8 @@ public class StartSceneController : MonoBehaviour
     /// </summary>
     [SerializeField, Tooltip("超立方体")]
 	public Transform_4D hypercube;
+    [SerializeField, Tooltip("立方体")]
+	public Transform_4D cube;
     [SerializeField, Tooltip("右目")]
 	public Transform_4D RightEyeCamera;
     [SerializeField, Tooltip("左目")]
@@ -79,23 +81,41 @@ public class StartSceneController : MonoBehaviour
 		*/
 
 		float rotationSpeed = 3f;
+		
+		/// オブジェクトの回転
+		/*
 		hypercube.Rotation1.y += Input.GetAxis("R-Horizontal") * rotationSpeed;
 		hypercube.Rotation1.z += Input.GetAxis("Horizontal") * rotationSpeed;
 		hypercube.Rotation2.x += Input.GetAxis("R-Vertical") * rotationSpeed;
 		hypercube.Rotation2.z += Input.GetAxis("Vertical") * rotationSpeed;
+		*/
 
-		RightEyeCamera.Position =  //InputTracking.GetLocalPosition(VRNode.CenterEye)
-				//-InputTracking.GetLocalPosition(VRNode.RightEye)+
-				RightEyeCamera.gameObject.transform.localPosition;
+		/*
+		cube.Rotation1.y += Input.GetAxis("R-Horizontal") * rotationSpeed;
+		cube.Rotation1.z += Input.GetAxis("Horizontal") * rotationSpeed;
+		cube.Rotation2.x += Input.GetAxis("R-Vertical") * rotationSpeed;
+		cube.Rotation2.z += Input.GetAxis("Vertical") * rotationSpeed;
+		*/
+
+		/// カメラの回転
+		RightEyeCamera.Rotation2.x += Input.GetAxis("R-Horizontal") * rotationSpeed;
+		RightEyeCamera.Rotation2.y += Input.GetAxis("R-Vertical") * rotationSpeed;
+		RightEyeCamera.Rotation2.z += Input.GetAxis("Vertical") * rotationSpeed;
+		LeftEyeCamera.Rotation2.x += Input.GetAxis("R-Horizontal") * rotationSpeed;
+		LeftEyeCamera.Rotation2.y += Input.GetAxis("R-Vertical") * rotationSpeed;
+		LeftEyeCamera.Rotation2.z += Input.GetAxis("Vertical") * rotationSpeed;
+
+
+		RightEyeCamera.Position = 
+				InputTracking.GetLocalPosition(VRNode.RightEye)
+				+RightEyeCamera.gameObject.transform.parent.localPosition;
 		RightEyeCamera.Rotation1 = 
-				//-InputTracking.GetLocalRotation(VRNode.RightEye).eulerAngles+
-				RightEyeCamera.gameObject.transform.localRotation.eulerAngles;
+				InputTracking.GetLocalRotation(VRNode.RightEye).eulerAngles;
+		
+		LeftEyeCamera.Position = 
+				InputTracking.GetLocalPosition(VRNode.LeftEye)
+				+LeftEyeCamera.gameObject.transform.parent.localPosition;
 		LeftEyeCamera.Rotation1 = 
-				//-InputTracking.GetLocalRotation(VRNode.RightEye).eulerAngles+
-				LeftEyeCamera.gameObject.transform.localRotation.eulerAngles;
-		LeftEyeCamera.Position = //InputTracking.GetLocalPosition(VRNode.CenterEye)
-				//-InputTracking.GetLocalPosition(VRNode.LeftEye)+
-				LeftEyeCamera.gameObject.transform.localPosition;
-
+				InputTracking.GetLocalRotation(VRNode.LeftEye).eulerAngles;
 	}
 }
