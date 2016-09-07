@@ -24,5 +24,23 @@ Material:
     m_Floats: []
     m_Colors:
     - first:
-        name: _CubeRotation
+        name: _CameraPosition
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _CameraRotation1
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _CameraRotation2
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _CubePosition
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _CubeRotation1
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _CubeRotation2
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _CubeScale
       second: {r: 0, g: 0, b: 0, a: 0}

@@ -6,9 +6,8 @@ using System.Linq;
 /// 立方体コントローラークラス
 /// </summary>
 [RequireComponent(typeof(MeshRenderer))]
-public class CubeController : MonoBehaviour
+public class CubeController_3D : MonoBehaviour
 {
-
     /// <summary>
     /// 面のアルファ値
     /// </summary>
@@ -52,16 +51,13 @@ public class CubeController : MonoBehaviour
     private int cameraRotation1Id_;
     private int cameraRotation2Id_;
 
-    // テクスチャプロパティID
-    private int mainTextureId_;
-
     /// <summary>
     /// ゲーム開始時の処理
     /// </summary>
     void Awake()
     {
         meshRenderer_ = GetComponent<MeshRenderer>();
-        mainTextureId_ = Shader.PropertyToID("_MainTex");
+
         cubePositionId_ = Shader.PropertyToID("_CubePosition");
         cubeRotation1Id_ = Shader.PropertyToID("_CubeRotation1");
         cubeRotation2Id_ = Shader.PropertyToID("_CubeRotation2");
@@ -69,32 +65,17 @@ public class CubeController : MonoBehaviour
         cameraPositionId_ = Shader.PropertyToID("_CameraPosition");
         cameraRotation1Id_ = Shader.PropertyToID("_CameraRotation1");
         cameraRotation2Id_ = Shader.PropertyToID("_CameraRotation2");
-
+ 
         Vector4[] vertices = new Vector4[]
         {
-            // 手前の面
-            vec(-0.5f,  0.5f, -0.5f, -0.5f), //0
-            vec( 0.5f,  0.5f, -0.5f, -0.5f), //1
-            vec( 0.5f, -0.5f, -0.5f, -0.5f), //2
-            vec(-0.5f, -0.5f, -0.5f, -0.5f), //3
-
-            // 奥の面
-            vec(-0.5f,  0.5f,  0.5f, -0.5f), //4
-            vec( 0.5f,  0.5f,  0.5f, -0.5f), //5
-            vec( 0.5f, -0.5f,  0.5f, -0.5f), //6
-            vec(-0.5f, -0.5f,  0.5f, -0.5f), //7
-
-            // 手前の面
-            vec(-0.5f,  0.5f, -0.5f, 0.5f), //8
-            vec( 0.5f,  0.5f, -0.5f, 0.5f), //9
-            vec( 0.5f, -0.5f, -0.5f, 0.5f), //10
-            vec(-0.5f, -0.5f, -0.5f, 0.5f), //11
-
-            // 奥の面
-            vec(-0.5f,  0.5f,  0.5f, 0.5f), //12
-            vec( 0.5f,  0.5f,  0.5f, 0.5f), //13
-            vec( 0.5f, -0.5f,  0.5f, 0.5f), //14
-            vec(-0.5f, -0.5f,  0.5f, 0.5f), //15
+            vec(-0.5f,  0.5f, -0.5f, 0.0f), //0
+            vec( 0.5f,  0.5f, -0.5f, 0.0f), //1
+            vec( 0.5f, -0.5f, -0.5f, 0.0f), //2
+            vec(-0.5f, -0.5f, -0.5f, 0.0f), //3
+            vec(-0.5f,  0.5f,  0.5f, 0.0f), //4
+            vec( 0.5f,  0.5f,  0.5f, 0.0f), //5
+            vec( 0.5f, -0.5f,  0.5f, 0.0f), //6
+            vec(-0.5f, -0.5f,  0.5f, 0.0f), //7
         };
 
         mesh_ = new Mesh();
@@ -113,54 +94,13 @@ public class CubeController : MonoBehaviour
             rgba(0.0f, 1.0f, 0.0f, ALPHA), //green
             rgba(0.0f, 0.0f, 1.0f, ALPHA), //blue
             rgba(1.0f, 1.0f, 0.0f, ALPHA), //yellow
-
             rgba(0.0f, 1.0f, 1.0f, ALPHA), //skyblue
             rgba(1.0f, 0.0f, 1.0f, ALPHA), //magenta
             rgba(1.0f, 1.0f, 1.0f, ALPHA), //white
             rgba(0.0f, 0.0f, 0.0f, ALPHA), //black
-
-            rgba(0.0f, 1.0f, 1.0f, ALPHA), //skyblue
-            rgba(1.0f, 0.0f, 1.0f, ALPHA), //magenta
-            rgba(1.0f, 1.0f, 1.0f, ALPHA), //white
-            rgba(0.0f, 0.0f, 0.0f, ALPHA), //black
-
-            rgba(1.0f, 0.0f, 0.0f, ALPHA), //red
-            rgba(0.0f, 1.0f, 0.0f, ALPHA), //green
-            rgba(0.0f, 0.0f, 1.0f, ALPHA), //blue
-            rgba(1.0f, 1.0f, 0.0f, ALPHA), //yellow
         };
-
-        // テクスチャ座標の設定
-        Vector2[] uvs = new Vector2[]
-        {
-            // 手前の面
-            vec( 0.0f,  0.0f), //0
-            vec( 1.0f,  0.0f), //1
-            vec( 1.0f,  1.0f), //2
-            vec( 0.0f,  1.0f), //3
-
-            // 奥の面
-            vec( 0.0f,  0.0f), //0
-            vec( 1.0f,  0.0f), //1
-            vec( 1.0f,  1.0f), //2
-            vec( 0.0f,  1.0f), //3
-
-            // 手前の面
-            vec( 0.0f,  0.0f), //0
-            vec( 1.0f,  0.0f), //1
-            vec( 1.0f,  1.0f), //2
-            vec( 0.0f,  1.0f), //3
-
-            // 奥の面
-            vec( 0.0f,  0.0f), //0
-            vec( 1.0f,  0.0f), //1
-            vec( 1.0f,  1.0f), //2
-            vec( 0.0f,  1.0f), //3
-        };
-
-        mesh_.uv2 = uvs;
         
-        if (lines)
+        if(lines)
         {
             // 輪郭線の定義
             mesh_.SetIndices(new int[] {
@@ -178,31 +118,6 @@ public class CubeController : MonoBehaviour
                 1, 5,
                 2, 6,
                 3, 7,
-
-                8, 9,
-                9, 10,
-                10, 11,
-                11, 8,
-
-                12, 13,
-                13, 14,
-                14, 15,
-                15, 12,
-
-                8, 12,
-                9, 13,
-                10, 14,
-                11, 15,
-
-                0, 8,
-                1, 9,
-                2, 10,
-                3, 11,
-
-                4, 12,
-                5, 13,
-                6, 14,
-                7, 15,
             }, MeshTopology.Lines, 0);
         }
         else
@@ -211,8 +126,6 @@ public class CubeController : MonoBehaviour
             // 時計回り方向が法線方向
             mesh_.triangles = new int[]
             {
-            // -wの立方体
-
             // 手前の面
             0, 1, 2,
             0, 2, 3,
@@ -236,86 +149,6 @@ public class CubeController : MonoBehaviour
             // 奥の面
             4, 7, 6,
             4, 6, 5,
-
-            // +wの立方体
-
-            // 手前の面
-            8, 9, 10,
-            8, 10, 11,
-            
-            // 上面
-            8, 12, 13,
-            8, 13, 9,
-
-            // 下面
-            11, 14, 15,
-            11, 10, 14,
-
-            // 左面
-            8, 15, 12,
-            8, 11, 15,
-
-            // 右面
-            9, 13, 14,
-            9, 14, 10,
-
-            // 奥の面
-            12, 15, 14,
-            12, 14, 13,
-
-            // 2つの立方体をつなぐ-y側の面
-
-            // 手前の面
-            11, 10, 2,
-            11, 2, 3,
-
-            // 右の面
-            10, 14, 6,
-            10, 6, 2,
-
-            // 左の面
-            11, 3, 7,
-            11, 7, 15,
-
-            // 奥の面
-            14, 15, 7,
-            14, 7, 6,
-
-            // 2つの立方体をつなぐ+y側の面
-
-            // 手前の面
-            0, 8, 1,
-            1, 9, 8,
-
-            // 右の面
-            1, 5, 13,
-            1, 13, 9,
-            
-            // 左の面
-            0, 12, 4,
-            0, 8, 12,
-
-            // 奥の面
-            5, 4, 12,
-            5, 12, 13,
-
-            // 2つの立方体をつなぐ縦の面
-
-            // 左前の面
-            0, 8, 11,
-            0, 11, 3,
-
-            // 右前の面
-            1, 2, 10,
-            1, 10, 9,
-
-            // 左後の面
-            4, 7, 15,
-            4, 15, 12,
-
-            // 右後の面
-            5, 13, 14,
-            5, 14, 6,
             };
 
             mesh_.RecalculateNormals();
@@ -330,12 +163,8 @@ public class CubeController : MonoBehaviour
     {
         gameObject.AddComponent<MeshFilter>().mesh = mesh_;
 
-        // ダミーオブジェクトを非表示にする
-        transform.FindChild("Dummy").gameObject.SetActive(false);
-
-        MovieTexture texture = (MovieTexture)meshRenderer_.material.GetTexture(mainTextureId_);
-        texture.loop = true;
-        texture.Play();
+        // ダミーオブジェクトを非表示にする		
+		transform.FindChild("Dummy").gameObject.SetActive(false);
     }
 	
     /// <summary>
