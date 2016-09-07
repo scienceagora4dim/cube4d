@@ -1063,6 +1063,7 @@ MonoBehaviour:
   cube: {fileID: 1562350307}
   RightEyeCamera: {fileID: 1945357709}
   LeftEyeCamera: {fileID: 2108349347}
+  squint: 0
 --- !u!1001 &1282855081
 Prefab:
   m_ObjectHideFlags: 0
@@ -1289,8 +1290,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Position: {x: 0, y: 0, z: 0, w: 0}
-  Rotation1: {x: 0, y: 0, z: 0}
-  Rotation2: {x: 0, y: 0, z: 0}
+  Rotation1: {x: 0, y: 0, z: 30}
+  Rotation2: {x: 0, y: 30, z: 30}
   Scale: {x: 1, y: 1, z: 1, w: 1}
 --- !u!1001 &1428657603
 Prefab:
@@ -1531,7 +1532,7 @@ MonoBehaviour:
   m_Script: {fileID: -619905303, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 1408523787}
   m_sendNavigationEvents: 1
   m_DragThreshold: 5
 --- !u!4 &1460128352
@@ -1590,8 +1591,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Position: {x: -2, y: 0, z: 0, w: 0}
-  Rotation1: {x: 0, y: 0, z: 0}
-  Rotation2: {x: 0, y: 0, z: 0}
+  Rotation1: {x: 0, y: 0, z: 10}
+  Rotation2: {x: 0, y: 10, z: 10}
   Scale: {x: 1, y: 1, z: 1, w: 1}
 --- !u!1 &1685363204
 GameObject:
