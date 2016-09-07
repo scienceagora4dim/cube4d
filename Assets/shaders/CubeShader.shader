@@ -59,9 +59,9 @@
 				float s = sin(theta);
 				const float4x4 result =
 				{
-					   c, 0.0f,   -s, 0.0f,
+					   c, 0.0f,    s, 0.0f,
 					0.0f, 1.0f, 0.0f, 0.0f,
-					   s, 0.0f,    c, 0.0f,
+					  -s, 0.0f,    c, 0.0f,
 					0.0f, 0.0f, 0.0f, 1.0f,
 				};
 				return result;
@@ -90,8 +90,8 @@
 				const float4x4 result =
 				{
 					1.0f, 0.0f, 0.0f, 0.0f,
-					0.0f,    c,    s, 0.0f,
-					0.0f,   -s,    c, 0.0f,
+					0.0f,    c,   -s, 0.0f,
+					0.0f,    s,    c, 0.0f,
 					0.0f, 0.0f, 0.0f, 1.0f,
 				};
 				return result;
@@ -150,15 +150,19 @@
 					mul(Czw, mul(Cyw, mul(Cyz, mul(Cxw, mul(Cxz, Cxy)))));
 
 
-			//TODO: ちゃんと5x5の行列として扱う。
+			// TODO: ちゃんと5x5の行列として扱う。
 			// モデルビュー変換の回転部分
 			static float4x4 RotationMV = mul(transpose(CameraRotation4D), Rotation4D);
 					
 					//;
 			// モデルビュー変換の平行移動部分
 			static float4 TranslationMV = 
-					mul(transpose(CameraRotation4D), _CubePosition)+
+					mul(transpose(CameraRotation4D), _CubePosition)-
 					mul(transpose(CameraRotation4D), _CameraPosition); 
+
+			// モデル原点の位置、およびそのwバッファ。
+			static float4 ModelPosition = mul(RotationMV, _CubePosition)+TranslationMV;
+			static float wBaffa = UNITY_MATRIX_P[1][1] * ModelPosition.w;
 
 
 			/**
@@ -196,15 +200,19 @@
 				v2f o;
 
 				float4 vertex = float4(v.vertex.xyz, v.uv.x);
-				float baffa;
+				// w方向の見切れの処理
+				// ToDo: もっと良い処理方法を考える
+				if(wBaffa<=-3||wBaffa>=3) vertex=float4(0,0,0,0);
 
 				// 4次元のモデル・ビュー変換を行う。
 				vertex = mul(RotationMV, vertex)+TranslationMV;
 
-				baffa = vertex.w;
+				// w座標を単に落とすことで3次元に射影。
 				vertex.w = 1;
+				// 右手系→左手系
+				vertex.z = -vertex.z;
 
-				// 3次元MVP変換
+				// 3次元投影変換（4次元投影変換→1次元分射影とするのと結果は同じ）
 				o.vertex = mul(UNITY_MATRIX_P, vertex);
 
 				// 頂点色の引継ぎ
