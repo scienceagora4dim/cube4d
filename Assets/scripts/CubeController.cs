@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+using cube4d.hobj;
 
 /// <summary>
 /// 立方体コントローラークラス
@@ -15,11 +16,11 @@ public class CubeController : MonoBehaviour
     private const float ALPHA = 0.3f;
 
     /// <summary>
-    /// 線のみ描画するかどうかのフラグ
+    /// オブジェクト形状のソースコード
     /// </summary>
-    [SerializeField, Tooltip("線のみ描画するかどうか")]
-    private bool lines;
-   
+    [SerializeField, Tooltip("オブジェクト形状のソースコード")]
+    public TextAsset objectSource;
+
     [SerializeField, Tooltip("親オブジェクト")]
 	public Transform_4D parent;
 
@@ -67,43 +68,11 @@ public class CubeController : MonoBehaviour
         cameraRotation1Id_ = Shader.PropertyToID("_CameraRotation1");
         cameraRotation2Id_ = Shader.PropertyToID("_CameraRotation2");
 
-        Vector4[] vertices = new Vector4[]
-        {
-            // 手前の面
-            vec(-0.5f,  0.5f, -0.5f, -0.5f), //0
-            vec( 0.5f,  0.5f, -0.5f, -0.5f), //1
-            vec( 0.5f, -0.5f, -0.5f, -0.5f), //2
-            vec(-0.5f, -0.5f, -0.5f, -0.5f), //3
+        // オブジェクト形状の読み込み
+        HigherObject hobj = HigherObjects.ReadFromSource(objectSource.text).First().Value;
+        mesh_ = HigherObjects.MakeMesh(hobj);
 
-            // 奥の面
-            vec(-0.5f,  0.5f,  0.5f, -0.5f), //4
-            vec( 0.5f,  0.5f,  0.5f, -0.5f), //5
-            vec( 0.5f, -0.5f,  0.5f, -0.5f), //6
-            vec(-0.5f, -0.5f,  0.5f, -0.5f), //7
-
-            // 手前の面
-            vec(-0.5f,  0.5f, -0.5f, 0.5f), //8
-            vec( 0.5f,  0.5f, -0.5f, 0.5f), //9
-            vec( 0.5f, -0.5f, -0.5f, 0.5f), //10
-            vec(-0.5f, -0.5f, -0.5f, 0.5f), //11
-
-            // 奥の面
-            vec(-0.5f,  0.5f,  0.5f, 0.5f), //12
-            vec( 0.5f,  0.5f,  0.5f, 0.5f), //13
-            vec( 0.5f, -0.5f,  0.5f, 0.5f), //14
-            vec(-0.5f, -0.5f,  0.5f, 0.5f), //15
-        };
-
-        mesh_ = new Mesh();
-
-        // 頂点の設定(4次元座標の3次元分だけ設定)
-        mesh_.vertices = vertices.Select(v => new Vector3(v.x, v.y, v.z)).ToArray();
-
-        // 4つ目の座標軸の点の設定
-        // UV座標で代用する。ここでのuの値がxyzwのwになる。
-        mesh_.uv = vertices.Select(v => new Vector2(v.w, 0.0f)).ToArray();
-
-        // 頂点色の設定
+        // TODO: 頂点色もファイルで設定できるようにする
         mesh_.colors = new Color[]
         {
             rgba(1.0f, 0.0f, 0.0f, ALPHA), //red
@@ -126,168 +95,6 @@ public class CubeController : MonoBehaviour
             rgba(0.0f, 0.0f, 1.0f, ALPHA), //blue
             rgba(1.0f, 1.0f, 0.0f, ALPHA), //yellow
         };
-        
-        if(lines)
-        {
-            // 輪郭線の定義
-            mesh_.SetIndices(new int[] {
-                0, 1,
-                1, 2,
-                2, 3,
-                3, 0,
-
-                4, 5,
-                5, 6,
-                6, 7,
-                7, 4,
-
-                0, 4,
-                1, 5,
-                2, 6,
-                3, 7,
-
-                8, 9,
-                9, 10,
-                10, 11,
-                11, 8,
-
-                12, 13,
-                13, 14,
-                14, 15,
-                15, 12,
-
-                8, 12,
-                9, 13,
-                10, 14,
-                11, 15,
-
-                0, 8,
-                1, 9,
-                2, 10,
-                3, 11,
-
-                4, 12,
-                5, 13,
-                6, 14,
-                7, 15,
-            }, MeshTopology.Lines, 0);
-        }
-        else
-        {
-            // 面(三角形分割)の設定
-            // 時計回り方向が法線方向
-            mesh_.triangles = new int[]
-            {
-            // -wの立方体
-
-            // 手前の面
-            0, 1, 2,
-            0, 2, 3,
-            
-            // 上面
-            0, 4, 5,
-            0, 5, 1,
-
-            // 下面
-            3, 6, 7,
-            3, 2, 6,
-
-            // 左面
-            0, 7, 4,
-            0, 3, 7,
-
-            // 右面
-            1, 5, 6,
-            1, 6, 2,
-
-            // 奥の面
-            4, 7, 6,
-            4, 6, 5,
-
-            // +wの立方体
-
-            // 手前の面
-            8, 9, 10,
-            8, 10, 11,
-            
-            // 上面
-            8, 12, 13,
-            8, 13, 9,
-
-            // 下面
-            11, 14, 15,
-            11, 10, 14,
-
-            // 左面
-            8, 15, 12,
-            8, 11, 15,
-
-            // 右面
-            9, 13, 14,
-            9, 14, 10,
-
-            // 奥の面
-            12, 15, 14,
-            12, 14, 13,
-
-            // 2つの立方体をつなぐ-y側の面
-
-            // 手前の面
-            11, 10, 2,
-            11, 2, 3,
-
-            // 右の面
-            10, 14, 6,
-            10, 6, 2,
-
-            // 左の面
-            11, 3, 7,
-            11, 7, 15,
-
-            // 奥の面
-            14, 15, 7,
-            14, 7, 6,
-
-            // 2つの立方体をつなぐ+y側の面
-
-            // 手前の面
-            0, 8, 1,
-            1, 9, 8,
-
-            // 右の面
-            1, 5, 13,
-            1, 13, 9,
-            
-            // 左の面
-            0, 12, 4,
-            0, 8, 12,
-
-            // 奥の面
-            5, 4, 12,
-            5, 12, 13,
-
-            // 2つの立方体をつなぐ縦の面
-
-            // 左前の面
-            0, 8, 11,
-            0, 11, 3,
-
-            // 右前の面
-            1, 2, 10,
-            1, 10, 9,
-
-            // 左後の面
-            4, 7, 15,
-            4, 15, 12,
-
-            // 右後の面
-            5, 13, 14,
-            5, 14, 6,
-            };
-
-            mesh_.RecalculateNormals();
-        }
-        mesh_.RecalculateBounds();
     }
 
     /// <summary>
